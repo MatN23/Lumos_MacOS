@@ -1,0 +1,5 @@
+#!/bin/bash
+echo "AR called with: $@" >> /Users/matias/Documents/Projects/C++/Lumos-main/ar_log.txt
+mkdir -p /Users/matias/Documents/Projects/C++/Lumos-main/build_tmp
+export TMPDIR=/Users/matias/Documents/Projects/C++/Lumos-main/build_tmp
+/usr/bin/ar "$@"

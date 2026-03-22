@@ -160,7 +160,6 @@ namespace Lumos::Graphics
         m_MaterialProperties->workflow           = properties.workflow;
         m_MaterialProperties->reflectance        = properties.reflectance;
 
-        m_MaterialPropertiesDirty = true;
         UpdateMaterialPropertiesData();
     }
 
@@ -257,13 +256,9 @@ namespace Lumos::Graphics
             SetTexturesUpdated(false);
         }
 
-        if(m_MaterialPropertiesDirty)
-        {
-            m_DescriptorSet->SetUniformBufferData(6, *&m_MaterialProperties);
-            m_MaterialPropertiesDirty = false;
-        }
-
         m_DescriptorSet->Update();
+
+        // UpdateDescriptorSet();
     }
 
     void Material::SetShader(const std::string& filePath)
@@ -294,7 +289,9 @@ namespace Lumos::Graphics
         if(tex)
         {
             m_PBRMaterialTextures.albedo = tex;
+            m_MaterialProperties->albedoMapFactor = 1.0f;
             m_TexturesUpdated            = true;
+            UpdateMaterialPropertiesData();
         }
     }
 
@@ -306,7 +303,9 @@ namespace Lumos::Graphics
         if(tex)
         {
             m_PBRMaterialTextures.normal = tex;
+            m_MaterialProperties->normalMapFactor = 1.0f;
             m_TexturesUpdated            = true;
+            UpdateMaterialPropertiesData();
         }
     }
 
@@ -318,7 +317,9 @@ namespace Lumos::Graphics
         if(tex)
         {
             m_PBRMaterialTextures.roughness = tex;
+            m_MaterialProperties->roughnessMapFactor = 1.0f;
             m_TexturesUpdated               = true;
+            UpdateMaterialPropertiesData();
         }
     }
 
@@ -330,7 +331,9 @@ namespace Lumos::Graphics
         if(tex)
         {
             m_PBRMaterialTextures.metallic = tex;
+            m_MaterialProperties->metallicMapFactor = 1.0f;
             m_TexturesUpdated              = true;
+            UpdateMaterialPropertiesData();
         }
     }
 
@@ -342,7 +345,9 @@ namespace Lumos::Graphics
         if(tex)
         {
             m_PBRMaterialTextures.ao = tex;
+            m_MaterialProperties->occlusionMapFactor = 1.0f;
             m_TexturesUpdated        = true;
+            UpdateMaterialPropertiesData();
         }
     }
 
@@ -354,7 +359,9 @@ namespace Lumos::Graphics
         if(tex)
         {
             m_PBRMaterialTextures.emissive = tex;
+            m_MaterialProperties->emissiveMapFactor = 1.0f;
             m_TexturesUpdated              = true;
+            UpdateMaterialPropertiesData();
         }
     }
 }

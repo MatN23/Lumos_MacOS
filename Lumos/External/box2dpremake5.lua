@@ -6,7 +6,9 @@ project 'box2d'
 	language "C"
 	cppdialect "C++17"
 	cdialect "C11"
-	vectorextensions "SSE2"
+	filter "architecture:x86 or architecture:x86_64"
+		vectorextensions "SSE2"
+	filter {}
 	staticruntime "on"
 	files { 'box2d/src/**' }
 	includedirs { 'box2d/include' , 'box2d/src', 'box2d/extern/simde' }

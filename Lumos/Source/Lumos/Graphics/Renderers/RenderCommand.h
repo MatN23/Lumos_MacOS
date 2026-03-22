@@ -19,9 +19,6 @@ namespace Lumos
             Mat4 textureMatrix;
             bool animated                        = false;
             DescriptorSet* AnimatedDescriptorSet = nullptr;
-            u32 instanceCount                    = 1;
-            u32 firstInstance                    = 0;
-            bool instanced                       = false;
         };
     }
 }

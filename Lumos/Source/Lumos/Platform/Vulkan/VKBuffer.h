@@ -45,8 +45,6 @@ namespace Lumos
             VmaAllocation m_Allocation {};
             VmaAllocation m_MappedAllocation {};
             VmaAllocationInfo m_AllocationInfo {};
-            VkBuffer m_StagingBuffer {};
-            VmaAllocation m_StagingAllocation {};
 #endif
         };
     }

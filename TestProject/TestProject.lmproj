@@ -1,0 +1,17 @@
+{
+    "value0": {
+        "Project Version": 8,
+        "RenderAPI": 1,
+        "Fullscreen": false,
+        "VSync": true,
+        "ShowConsole": true,
+        "Title": "App",
+        "Scenes": [
+            "//Assets/Scenes/Empty Scene"
+        ],
+        "SceneIndex": 0,
+        "Borderless": false,
+        "EngineAssetPath": "/Users/matias/Documents/Projects/C++/Lumos-main/bin/Release-macosx-arm64/../../Lumos/Assets/",
+        "GPUIndex": -1
+    }
+}

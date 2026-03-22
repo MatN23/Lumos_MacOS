@@ -104,7 +104,6 @@ namespace Lumos
 
             bool Init();
             void CreatePipelineCache();
-            void SavePipelineCache();
             void CreateTracyContext();
 
             VkDevice GetDevice() const
@@ -184,7 +183,6 @@ namespace Lumos
             VkQueue m_GraphicsQueue;
             VkQueue m_PresentQueue;
             VkPipelineCache m_PipelineCache;
-            std::string m_PipelineCachePath;
             VkDescriptorPool m_DescriptorPool;
             VkPhysicalDeviceFeatures m_EnabledFeatures;
 

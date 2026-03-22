@@ -5,7 +5,6 @@ function SetRecommendedXcodeSettings()
    {
 		['ARCHS'] = false,
 		['GCC_ENABLE_FIX_AND_CONTINUE'] = false,
-		['SKIP_INSTALL'] = 'YES',
 	  	['CLANG_WARN_EMPTY_BODY'] = 'YES',
 	  	['CLANG_ENABLE_OBJC_WEAK'] = 'YES',
 	  	['GCC_WARN_UNUSED_FUNCTION'] = 'YES',
@@ -16,7 +15,7 @@ function SetRecommendedXcodeSettings()
 	  	['CLANG_WARN_CONSTANT_CONVERSION'] = 'YES',
 	  	['GCC_WARN_64_TO_32_BIT_CONVERSION'] = 'YES',
 	  	['PRECOMPS_INCLUDE_HEADERS_FROM_BUILT_PRODUCTS_DIR'] = 'YES',
-		['SCAN_ALL_SOURCE_FILES_FOR_INCLUDES'] = 'YES',
+		['SCAN_ALL_SOURCE_FILES_FOR_INCLUDES'] = 'NO',
 		['GCC_WARN_MISSING_PARENTHESES'] = 'NO',
 		['GCC_WARN_CHECK_SWITCH_STATEMENTS'] = 'NO',
 		['GCC_AUTO_VECTORIZATION'] = 'NO',
@@ -86,18 +85,12 @@ function SetRecommendedXcodeSettings()
 			['ENABLE_TESTABILITY'] = 'YES',
 			--['ONLY_ACTIVE_ARCH'] = 'YES'
 		}
-	filter{"system:macosx", "configurations:Debug"}
-		xcodebuildsettings
-		{
+	filter{"system:macosx"}
+		xcodebuildsettings 
+		{   
 			["MACOSX_DEPLOYMENT_TARGET"] = "10.15",
+			--['ARCHS'] = 'x86_64',
 			['ONLY_ACTIVE_ARCH'] = 'YES',
-		}
-
-	filter{"system:macosx", "configurations:Release or Production"}
-		xcodebuildsettings
-		{
-			["MACOSX_DEPLOYMENT_TARGET"] = "10.15",
-			['ONLY_ACTIVE_ARCH'] = 'NO',
 		}
 
 	filter {"system:ios"}
@@ -107,7 +100,7 @@ function SetRecommendedXcodeSettings()
 			['SDKROOT'] = 'iphoneos',
 			['TARGETED_DEVICE_FAMILY'] = '1,2',
 			['SUPPORTED_PLATFORMS'] = 'iphonesimulator iphoneos',
-			['IPHONEOS_DEPLOYMENT_TARGET'] = '18.0'
+			['IPHONEOS_DEPLOYMENT_TARGET'] = '13.0'
 		}
 end
 

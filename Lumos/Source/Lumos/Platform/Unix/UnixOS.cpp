@@ -10,10 +10,6 @@
 #include <sys/sysctl.h>
 #include <mach/mach.h>
 #endif
-#ifdef LUMOS_PLATFORM_LINUX
-#include <linux/limits.h>
-#include <unistd.h>
-#endif
 
 extern Lumos::Application* Lumos::CreateApplication();
 
@@ -98,7 +94,7 @@ namespace Lumos
     {
 #ifndef LUMOS_PLATFORM_MOBILE
         std::string command = "open -R " + path;
-        (void)std::system(command.c_str());
+        std::system(command.c_str());
 #endif
     }
 
@@ -106,7 +102,7 @@ namespace Lumos
     {
 #ifndef LUMOS_PLATFORM_MOBILE
         std::string command = "open " + path;
-        (void)std::system(command.c_str());
+        std::system(command.c_str());
 #endif
     }
 
@@ -114,7 +110,7 @@ namespace Lumos
     {
 #ifndef LUMOS_PLATFORM_MOBILE
         std::string command = "open " + url;
-        (void)system(command.c_str());
+        system(command.c_str());
 #endif
     }
 

@@ -31,13 +31,6 @@ namespace Lumos
         uint32_t* indices    = new uint32_t[numIndices];
         m_BoundingBox        = {};
 
-        m_GridWidth  = width;
-        m_GridHeight = height;
-        m_XScale     = xRand;
-        m_YScale     = yRand;
-        m_ZScale     = zRand;
-        m_HeightData.Resize(numVertices);
-
         for(int x = 0; x < width; ++x)
         {
             for(int z = 0; z < height; ++z)
@@ -47,12 +40,9 @@ namespace Lumos
                 float dataVal = Noise(x + (xCoord * width),
                                       z + (zCoord * width));
 
-                float rawHeight          = dataVal * dataVal * dataVal;
-                m_HeightData[offset]     = rawHeight;
-
                 vertices[offset] = Vec3(
                     (static_cast<float>(x) + (static_cast<float>(xCoord) * float(width))) * xRand,
-                    rawHeight * yRand,
+                    (dataVal * dataVal * dataVal) * yRand,
                     (static_cast<float>(z) + (static_cast<float>(zCoord) * float(width))) * zRand);
 
                 texCoords[offset] = Vec2(x * texRandX, z * texRandZ);

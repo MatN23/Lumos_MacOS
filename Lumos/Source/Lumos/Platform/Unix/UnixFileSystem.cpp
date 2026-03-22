@@ -163,8 +163,11 @@ namespace Lumos
     String8 FileSystem::GetWorkingDirectory(Arena* arena)
     {
         String8 Path = PushStr8FillByte(arena, 4096, 0);
-        if(getcwd((char*)Path.str, Path.size) != NULL)
+        if(getcwd((char*)Path.str, 4096) != NULL)
+        {
+            Path.size = strlen((const char*)Path.str);
             LINFO((const char*)Path.str);
+        }
 
         return Path;
     }

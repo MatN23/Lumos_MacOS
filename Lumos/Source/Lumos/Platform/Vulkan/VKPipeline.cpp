@@ -40,6 +40,8 @@ namespace Lumos
             m_Shader         = m_Description.shader;
             m_PipelineLayout = m_Shader.As<VKShader>()->GetPipelineLayout();
 
+            TransitionAttachments();
+
             // Pipeline
             TDArray<VkDynamicState> dynamicStateDescriptors;
             VkPipelineDynamicStateCreateInfo dynamicStateCI {};

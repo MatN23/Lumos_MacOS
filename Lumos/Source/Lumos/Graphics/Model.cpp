@@ -3,16 +3,136 @@
 #include "Mesh.h"
 #include "Material.h"
 #include "Utilities/StringUtilities.h"
-#include "Utilities/Hash.h"
 #include "Core/OS/FileSystem.h"
-#include "Core/Application.h"
-#include "Core/Asset/AssetImporter.h"
-#include "Core/Asset/LMeshReader.h"
-#include "Core/Asset/LAnimReader.h"
 #include "Animation/Skeleton.h"
 #include "Animation/Animation.h"
 #include "Animation/AnimationController.h"
 #include "Animation/SamplingContext.h"
+#include <cstdlib>
+#include <filesystem>
+#include <vector>
+
+namespace
+{
+#if defined(LUMOS_PLATFORM_WINDOWS)
+    std::string QuoteShellArg(const std::string& value)
+    {
+        std::string out = "\"";
+        for(char c : value)
+        {
+            if(c == '\"')
+                out += "\\\"";
+            else
+                out += c;
+        }
+        out += "\"";
+        return out;
+    }
+#else
+    std::string QuoteShellArg(const std::string& value)
+    {
+        std::string out = "'";
+        for(char c : value)
+        {
+            if(c == '\'')
+                out += "'\"'\"'";
+            else
+                out += c;
+        }
+        out += "'";
+        return out;
+    }
+#endif
+
+    std::string EscapePythonString(const std::string& value)
+    {
+        std::string out;
+        out.reserve(value.size() * 2);
+        for(char c : value)
+        {
+            if(c == '\\' || c == '\"')
+                out += '\\';
+            out += c;
+        }
+        return out;
+    }
+
+    bool ConvertBlendToGLB(const std::string& blendPath, std::string& outGlbPath)
+    {
+        namespace fs = std::filesystem;
+
+        std::error_code ec;
+        fs::path srcPath(blendPath);
+        if(!fs::exists(srcPath, ec) || fs::is_directory(srcPath, ec))
+            return false;
+
+        fs::path cacheDir = srcPath.parent_path() / "Cache" / "ConvertedModels";
+        fs::create_directories(cacheDir, ec);
+
+        fs::path outputPath = cacheDir / (srcPath.stem().string() + ".auto.glb");
+        outGlbPath          = outputPath.generic_string();
+
+        if(fs::exists(outputPath, ec))
+        {
+            std::error_code srcTimeError, dstTimeError;
+            const auto srcTime = fs::last_write_time(srcPath, srcTimeError);
+            const auto dstTime = fs::last_write_time(outputPath, dstTimeError);
+            if(!srcTimeError && !dstTimeError && dstTime >= srcTime)
+                return true;
+        }
+
+        const std::string pythonExpr = "import bpy;bpy.ops.export_scene.gltf(filepath=\"" + EscapePythonString(outGlbPath) + "\", export_format=\"GLB\")";
+#if defined(LUMOS_PLATFORM_WINDOWS)
+        const std::string suppressOutput = " >NUL 2>NUL";
+#else
+        const std::string suppressOutput = " >/dev/null 2>&1";
+#endif
+
+        std::vector<std::string> blenderExecutables = { "blender" };
+#if defined(LUMOS_PLATFORM_MACOS)
+        blenderExecutables.emplace_back("/Applications/Blender.app/Contents/MacOS/Blender");
+        blenderExecutables.emplace_back("/Applications/Blender.app/Contents/MacOS/blender");
+        blenderExecutables.emplace_back("/opt/homebrew/bin/blender");
+        blenderExecutables.emplace_back("/usr/local/bin/blender");
+
+        auto appendBlenderApps = [&blenderExecutables](const fs::path& basePath) {
+            std::error_code appScanError;
+            if(!fs::exists(basePath, appScanError) || !fs::is_directory(basePath, appScanError))
+                return;
+
+            for(const auto& entry : fs::directory_iterator(basePath, appScanError))
+            {
+                if(appScanError)
+                    break;
+                if(!entry.is_directory())
+                    continue;
+
+                std::string appName = Lumos::StringUtilities::ToLower(entry.path().filename().string());
+                if(appName.find("blender") == std::string::npos || entry.path().extension() != ".app")
+                    continue;
+
+                fs::path candidate = entry.path() / "Contents" / "MacOS" / "Blender";
+                if(fs::exists(candidate, appScanError))
+                    blenderExecutables.emplace_back(candidate.string());
+            }
+        };
+
+        appendBlenderApps("/Applications");
+        if(const char* home = std::getenv("HOME"))
+            appendBlenderApps(fs::path(home) / "Applications");
+#endif
+
+        for(const auto& blenderExecutable : blenderExecutables)
+        {
+            const std::string command = QuoteShellArg(blenderExecutable) + " -b " + QuoteShellArg(blendPath) + " --python-expr " + QuoteShellArg(pythonExpr) + suppressOutput;
+            const int result          = std::system(command.c_str());
+            if(result == 0 && fs::exists(outputPath, ec))
+                return true;
+        }
+
+        return false;
+    }
+} // namespace
 
 namespace Lumos::Graphics
 {
@@ -52,95 +172,11 @@ namespace Lumos::Graphics
     Model::Model(Model&&)                 = default;
     Model& Model::operator=(Model&&)      = default;
 
-    bool Model::LoadLMesh(const std::string& path)
-    {
-        LUMOS_PROFILE_FUNCTION();
-        Arena* lmeshArena = ArenaAlloc(Kilobytes(8));
-        bool result = LMeshReader::Read(lmeshArena, Str8StdS(path), *this);
-        ArenaRelease(lmeshArena);
-        return result;
-    }
-
-    bool Model::LoadLAnim(const std::string& path)
-    {
-        LUMOS_PROFILE_FUNCTION();
-        Arena* lanimArena = ArenaAlloc(Kilobytes(8));
-        bool result = LAnimReader::Read(lanimArena, Str8StdS(path), *this);
-        ArenaRelease(lanimArena);
-        return result;
-    }
-
     void Model::LoadModel(const std::string& path)
     {
         LUMOS_PROFILE_FUNCTION();
         ArenaTemp Scratch = ScratchBegin(0, 0);
 
-        const std::string fileExtension = StringUtilities::GetFilePathExtension(path);
-
-        // If it's already a .lmesh file, load directly
-        if(fileExtension == "lmesh")
-        {
-            if(LoadLMesh(path))
-            {
-                // Check for companion .lanim (same path with .lanim extension)
-                std::string animPath = path.substr(0, path.size() - 5) + "lanim";
-                if(FileSystem::Get().FileExistsVFS(Str8StdS(animPath)))
-                    LoadLAnim(animPath);
-
-                LINFO("Loaded Model (lmesh direct) - %s meshes=%d", path.c_str(), (int)m_Meshes.Size());
-            }
-            else
-            {
-                LERROR("Model: failed to load lmesh (version mismatch or corrupt), reimport required: %s", path.c_str());
-            }
-            ScratchEnd(Scratch);
-            return;
-        }
-
-        // Check for imported .lmesh version
-        // Convert source path to imported path: //Assets/Imported/<hash>.lmesh
-        {
-            std::string normalizedPath = AssetImporter::NormalizeAssetPath(path);
-            u64 pathHash = MurmurHash64A(normalizedPath.c_str(), (int)normalizedPath.size(), 0);
-            char importedPath[256];
-            snprintf(importedPath, sizeof(importedPath), "//Assets/Imported/%llu.lmesh", (unsigned long long)pathHash);
-
-            if(FileSystem::Get().FileExistsVFS(Str8C(importedPath)))
-            {
-                if(LoadLMesh(importedPath))
-                {
-                    // Check for companion .lanim
-                    char animPath[256];
-                    snprintf(animPath, sizeof(animPath), "//Assets/Imported/%llu.lanim", (unsigned long long)pathHash);
-                    if(FileSystem::Get().FileExistsVFS(Str8C(animPath)))
-                        LoadLAnim(animPath);
-
-                    LINFO("Loaded Model (imported lmesh) - %s meshes=%d", path.c_str(), (int)m_Meshes.Size());
-                    ScratchEnd(Scratch);
-                    return;
-                }
-                else if(Application::Get().GetProjectSettings().AutoImportMeshes)
-                {
-                    // .lmesh exists but failed to load (version mismatch) — reimport from source
-                    LINFO("Model: reimporting stale .lmesh for %s", path.c_str());
-                    ImportSettings settings;
-                    std::string imported = AssetImporter::Import(path, settings);
-                    if(!imported.empty() && LoadLMesh(importedPath))
-                    {
-                        char animPath[256];
-                        snprintf(animPath, sizeof(animPath), "//Assets/Imported/%llu.lanim", (unsigned long long)pathHash);
-                        if(FileSystem::Get().FileExistsVFS(Str8C(animPath)))
-                            LoadLAnim(animPath);
-
-                        LINFO("Loaded Model (reimported lmesh) - %s meshes=%d", path.c_str(), (int)m_Meshes.Size());
-                        ScratchEnd(Scratch);
-                        return;
-                    }
-                }
-            }
-        }
-
-        // Fallback to source loaders
         String8 physicalPath;
         if(!Lumos::FileSystem::Get().ResolvePhysicalPath(Scratch.arena, Str8StdS(path), &physicalPath))
         {
@@ -151,16 +187,44 @@ namespace Lumos::Graphics
 
         std::string resolvedPath = ToStdString(physicalPath);
 
+        const std::string fileExtension = StringUtilities::ToLower(StringUtilities::GetFilePathExtension(path));
+        bool loaded                     = false;
+
         if(fileExtension == "obj")
+        {
             LoadOBJ(resolvedPath);
+            loaded = true;
+        }
         else if(fileExtension == "gltf" || fileExtension == "glb")
+        {
             LoadGLTF(resolvedPath);
-        else if(fileExtension == "fbx" || fileExtension == "FBX")
+            loaded = true;
+        }
+        else if(fileExtension == "fbx")
+        {
             LoadFBX(resolvedPath);
+            loaded = true;
+        }
+        else if(fileExtension == "blend")
+        {
+            std::string convertedPath;
+            if(ConvertBlendToGLB(resolvedPath, convertedPath))
+            {
+                LINFO("Converted BLEND model to GLB : %s", convertedPath.c_str());
+                LoadGLTF(convertedPath);
+                loaded = true;
+            }
+            else
+            {
+                LERROR("Failed to import BLEND model %s", path.c_str());
+                LERROR("Auto-conversion requires Blender CLI in PATH (command: blender)");
+            }
+        }
         else
             LERROR("Unsupported File Type : %s", fileExtension.c_str());
 
-        LINFO("Loaded Model (source) - %s meshes=%d", path.c_str(), (int)m_Meshes.Size());
+        if(loaded)
+            LINFO("Loaded Model - %s", path.c_str());
         ScratchEnd(Scratch);
     }
 
@@ -260,46 +324,5 @@ namespace Lumos::Graphics
     SharedPtr<AnimationController> Model::GetAnimationController() const
     {
         return m_AnimationController;
-    }
-
-    const TDArray<Mat4>& Model::GetBindPoses() const
-    {
-        return m_BindPoses;
-    }
-
-    void Model::SetSkeleton(SharedPtr<Skeleton> skeleton)
-    {
-        m_Skeleton = skeleton;
-    }
-
-    void Model::SetAnimations(const TDArray<SharedPtr<Animation>>& animations)
-    {
-        m_Animation = animations;
-    }
-
-    void Model::SetBindPoses(const TDArray<Mat4>& bindPoses)
-    {
-        m_BindPoses = bindPoses;
-    }
-
-    void Model::LoadModelAsync(const std::string& path)
-    {
-        m_Loading       = true;
-        m_FilePath      = path;
-        m_PrimitiveType = PrimitiveType::File;
-
-        // Defer all model loading to main thread so caller doesn't block.
-        // Import() and LoadModel() both create GPU buffers, so they must run on main thread.
-        // This is still beneficial: the caller returns immediately and the model
-        // loads on the next frame's main thread dispatch, avoiding frame hitches
-        // during scene construction.
-        auto* self = this;
-        std::string pathCopy = path;
-
-        Application::Get().SubmitToMainThread([self, pathCopy]()
-        {
-            self->LoadModel(pathCopy);
-            self->m_Loading = false;
-        });
     }
 }

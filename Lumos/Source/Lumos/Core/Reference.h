@@ -72,13 +72,12 @@ namespace Lumos
             ref(other);
         }
 
-        Reference(Reference&& rhs) noexcept
+        Reference(Reference<T>&& rhs) noexcept
         {
-            m_Ptr     = rhs.m_Ptr;
-            m_Counter = rhs.m_Counter;
+            m_Ptr     = nullptr;
+            m_Counter = nullptr;
 
-            rhs.m_Ptr     = nullptr;
-            rhs.m_Counter = nullptr;
+            ref(rhs);
         }
 
         template <typename U>
@@ -131,16 +130,15 @@ namespace Lumos
         {
             T* tmp = nullptr;
 
-            if(m_Counter)
+            if(m_Counter->unreference())
             {
-                if(m_Counter->unreference() && m_Counter->GetWeakReferenceCount() == 0)
-                {
-                    delete m_Counter;
-                }
+                delete m_Counter;
                 m_Counter = nullptr;
             }
 
             Swap(tmp, m_Ptr);
+            m_Ptr = nullptr;
+
             return tmp;
         }
 
@@ -165,17 +163,7 @@ namespace Lumos
 
         inline Reference& operator=(Reference&& rhs) noexcept
         {
-            if(this == &rhs)
-                return *this;
-
-            unref();
-
-            m_Ptr     = rhs.m_Ptr;
-            m_Counter = rhs.m_Counter;
-
-            rhs.m_Ptr     = nullptr;
-            rhs.m_Counter = nullptr;
-
+            ref(rhs);
             return *this;
         }
 
@@ -190,7 +178,7 @@ namespace Lumos
         {
             U* movingPtr = moving.get();
 
-            T* castPointer = static_cast<T*>(movingPtr);
+            T* castPointer = dynamic_cast<T*>(movingPtr);
 
             unref();
 
@@ -198,7 +186,7 @@ namespace Lumos
             {
                 if(moving.GetCounter() && moving.get())
                 {
-                    m_Ptr     = castPointer;
+                    m_Ptr     = moving.get();
                     m_Counter = moving.GetCounter();
                     m_Counter->reference();
                 }
@@ -280,9 +268,6 @@ namespace Lumos
             return Reference<U>(*this);
         }
 
-        template <class U>
-        friend class WeakReference;
-
     private:
         inline void ref(const Reference& p_from)
         {
@@ -360,6 +345,15 @@ namespace Lumos
             AddRef();
         }
 
+        explicit WeakReference(T* ptr) noexcept
+            : m_Ptr(ptr)
+        {
+            ASSERT(ptr, "Creating weak ptr with nullptr");
+
+            m_Counter = new RefCount();
+            m_Counter->weakReference();
+        }
+
         template <class U>
         WeakReference(const WeakReference<U>& rhs) noexcept
             : m_Ptr(rhs.m_Ptr)
@@ -370,62 +364,22 @@ namespace Lumos
 
         WeakReference(const Reference<T>& rhs) noexcept
             : m_Ptr(rhs.get())
-            , m_Counter(rhs.GetCounter())
+            , m_Counter(rhs.m_Counter)
         {
             AddRef();
         }
 
         ~WeakReference() noexcept
         {
-            RemoveRef();
-        }
-
-        WeakReference(WeakReference&& rhs) noexcept
-            : m_Ptr(rhs.m_Ptr)
-            , m_Counter(rhs.m_Counter)
-        {
-            rhs.m_Ptr     = nullptr;
-            rhs.m_Counter = nullptr;
-        }
-
-        WeakReference& operator=(const WeakReference& rhs) noexcept
-        {
-            if(this != &rhs)
+            if(m_Counter->weakUnreference())
             {
-                RemoveRef();
-                m_Ptr     = rhs.m_Ptr;
-                m_Counter = rhs.m_Counter;
-                AddRef();
+                delete m_Ptr;
             }
-            return *this;
-        }
-
-        WeakReference& operator=(WeakReference&& rhs) noexcept
-        {
-            if(this != &rhs)
-            {
-                RemoveRef();
-                m_Ptr     = rhs.m_Ptr;
-                m_Counter = rhs.m_Counter;
-                rhs.m_Ptr     = nullptr;
-                rhs.m_Counter = nullptr;
-            }
-            return *this;
-        }
-
-        WeakReference& operator=(const Reference<T>& rhs) noexcept
-        {
-            RemoveRef();
-            m_Ptr     = rhs.get();
-            m_Counter = rhs.GetCounter();
-            AddRef();
-            return *this;
         }
 
         void AddRef()
         {
-            if(m_Counter)
-                m_Counter->weakReference();
+            m_Counter->weakReference();
         }
 
         bool Expired() const
@@ -437,28 +391,28 @@ namespace Lumos
         {
             if(Expired())
                 return Reference<T>();
-
-            Reference<T> r;
-            r.m_Ptr = m_Ptr;
-            r.m_Counter = m_Counter;
-            r.m_Counter->reference();
-            return r;
+            else
+                return Reference<T>(m_Ptr);
         }
-        
+
         inline T* operator->() const
         {
-            ASSERT(!Expired(), "Accessing expired WeakReference");
-            return m_Ptr;
+            return &*m_Ptr;
         }
         inline T& operator*() const
         {
-            ASSERT(!Expired(), "Accessing expired WeakReference");
             return *m_Ptr;
+        }
+
+        inline T& operator[](int index)
+        {
+            ASSERT(m_Ptr);
+            return m_Ptr[index];
         }
 
         inline explicit operator bool() const
         {
-            return !Expired();
+            return m_Ptr != nullptr;
         }
         inline bool operator==(const T* p_ptr) const
         {
@@ -481,20 +435,7 @@ namespace Lumos
             return m_Ptr != p_r.m_Ptr;
         }
 
-        template <class U>
-        friend class WeakReference;
-
     private:
-        void RemoveRef()
-        {
-            if(m_Counter && m_Counter->weakUnreference())
-            {
-                delete m_Counter;
-            }
-            m_Counter = nullptr;
-            m_Ptr     = nullptr;
-        }
-
         T* m_Ptr;
         RefCount* m_Counter = nullptr;
     };

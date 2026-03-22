@@ -879,6 +879,10 @@ namespace Lumos
                 {
                     presentMode = VK_PRESENT_MODE_FIFO_RELAXED_KHR;
                 }
+                else
+                {
+                    LINFO("No MAILBOX/IMMEDIATE/FIFO_RELAXED present mode supported, using FIFO.");
+                }
             }
 
             return presentMode;

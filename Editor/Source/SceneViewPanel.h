@@ -83,11 +83,8 @@ namespace Lumos
         uint32_t m_Width, m_Height;
 
         // Context menu state
-        Vec3 m_ContextMenuWorldPos    = Vec3(0.0f);
-        bool m_ContextMenuPending     = false;
-        bool m_RightMousePressed      = false;
-        bool m_RightMouseDragged      = false;
-        Vec2 m_RightMousePressPos     = Vec2(0.0f);
+        Vec3 m_ContextMenuWorldPos = Vec3(0.0f);
+        bool m_ContextMenuPending  = false;
 
         // Distance measurement tool
         bool m_MeasurementMode       = false;

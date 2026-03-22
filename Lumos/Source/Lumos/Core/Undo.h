@@ -28,5 +28,4 @@ namespace Lumos
     void Undo();
     void Redo();
     void InitialiseUndo();
-    void ReleaseUndo();
 }

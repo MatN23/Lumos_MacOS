@@ -9,7 +9,6 @@
 #include "Core/OS/FileSystem.h"
 #include "Core/OS/FileSystem.h"
 #include "Utilities/StringUtilities.h"
-#include "Scene/Serialisation/SerialisationImplementation.h"
 
 namespace Lumos
 {
@@ -74,8 +73,6 @@ namespace Lumos
 
     void SceneManager::ApplySceneSwitch()
     {
-        LUMOS_PROFILE_FUNCTION();
-
         if(m_SwitchingScenes == false)
         {
             if(m_CurrentScene)
@@ -98,7 +95,6 @@ namespace Lumos
         // Clear up old scene
         if(m_CurrentScene)
         {
-            LUMOS_PROFILE_SCOPE("SceneSwitch::CleanupOldScene");
             LINFO("[SceneManager] - Exiting scene : %s", m_CurrentScene->GetSceneName().c_str());
             app.GetSystem<LumosPhysicsEngine>()->SetPaused(true);
 
@@ -109,33 +105,24 @@ namespace Lumos
         m_SceneIdx     = m_QueuedSceneIndex;
         m_CurrentScene = m_vpAllScenes[m_QueuedSceneIndex].get();
 
-        {
-            LUMOS_PROFILE_SCOPE("SceneSwitch::PhysicsReset");
-            app.GetSystem<LumosPhysicsEngine>()->SetDefaults();
-            app.GetSystem<B2PhysicsEngine>()->SetDefaults();
-            app.GetSystem<LumosPhysicsEngine>()->SetPaused(false);
-        }
+        // Initialise new scene
+        app.GetSystem<LumosPhysicsEngine>()->SetDefaults();
+        app.GetSystem<B2PhysicsEngine>()->SetDefaults();
+        app.GetSystem<LumosPhysicsEngine>()->SetPaused(false);
 
+        String8 physicalPath;
+        std::string path = "//Assets/Scenes/" + m_CurrentScene->GetSceneName() + ".lsn";
+        if(Lumos::FileSystem::Get().ResolvePhysicalPath(Application::Get().GetFrameArena(), Str8StdS(path), &physicalPath))
         {
-            LUMOS_PROFILE_SCOPE("SceneSwitch::Deserialise");
-            String8 physicalPath;
-            std::string path = "//Assets/Scenes/" + m_CurrentScene->GetSceneName() + ".lsn";
-            if(Lumos::FileSystem::Get().ResolvePhysicalPath(Application::Get().GetFrameArena(), Str8StdS(path), &physicalPath))
-            {
-                auto newPath = StringUtilities::RemoveName(ToStdString(physicalPath));
-                m_CurrentScene->Deserialise(newPath, false);
-            }
-            TextureCache::Clear();
+            auto newPath = StringUtilities::RemoveName(ToStdString(physicalPath));
+            m_CurrentScene->Deserialise(newPath, false);
         }
 
         auto screenSize = app.GetWindowSize();
         m_CurrentScene->SetScreenSize(static_cast<uint32_t>(screenSize.x), static_cast<uint32_t>(screenSize.y));
 
         if(app.GetEditorState() == EditorState::Play)
-        {
-            LUMOS_PROFILE_SCOPE("SceneSwitch::OnInit");
             m_CurrentScene->OnInit();
-        }
 
         Application::Get().OnNewScene(m_CurrentScene);
 

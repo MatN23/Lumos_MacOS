@@ -9,6 +9,7 @@
 #include "Core/DataStructures/TDArray.h"
 #include "Core/Function.h"
 #include "Core/String.h"
+#include <string>
 
 namespace Lumos
 {

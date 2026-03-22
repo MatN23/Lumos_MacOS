@@ -1,8 +1,8 @@
 #pragma once
 #include "Core/Core.h"
+#include <string>
 #include "Maths/MathsFwd.h"
 #include "Utilities/TSingleton.h"
-#include <string>
 
 namespace Lumos
 {
@@ -15,11 +15,6 @@ namespace Lumos
         POWERSTATE_CHARGED
     };
 
-    struct SafeAreaInsets
-    {
-        float top = 0, bottom = 0, left = 0, right = 0;
-    };
-
     class LUMOS_EXPORT OS : public TSingletonAbstract<OS>
     {
         friend class TSingletonAbstract<OS>;
@@ -30,8 +25,6 @@ namespace Lumos
 
         virtual void Run() = 0;
         static void Create();
-
-        virtual SafeAreaInsets GetSafeAreaInsets() const { return {}; }
 
         static std::string PowerStateToString(PowerState state);
 

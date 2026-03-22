@@ -117,13 +117,9 @@ namespace Lumos
                 subresourceRange.layerCount              = 1;
                 subresourceRange.levelCount              = 1;
 
-                VKTexture2D* swapChainImage = static_cast<VKTexture2D*>(m_SwapChain->GetImage(i));
-                VKUtilities::TransitionImageLayout(swapChainImage->GetImage(), swapChainImage->GetVKFormat(), swapChainImage->GetImageLayout(), VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, 1, 1, cmd);
-
                 VkClearColorValue clearColourValue = VkClearColorValue({ { 0.0f, 0.0f, 0.0f, 0.0f } });
-                vkCmdClearColorImage(cmd, swapChainImage->GetImage(), VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, &clearColourValue, 1, &subresourceRange);
 
-                VKUtilities::TransitionImageLayout(swapChainImage->GetImage(), swapChainImage->GetVKFormat(), VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, swapChainImage->GetImageLayout(), 1, 1, cmd);
+                vkCmdClearColorImage(cmd, static_cast<VKTexture2D*>(m_SwapChain->GetImage(i))->GetImage(), VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL, &clearColourValue, 1, &subresourceRange);
 
                 VKUtilities::EndSingleTimeCommands(cmd);
             }
@@ -255,14 +251,13 @@ namespace Lumos
                 VK_PIPELINE_STAGE_TRANSFER_BIT,
                 VkImageSubresourceRange { VK_IMAGE_ASPECT_COLOR_BIT, 0, 1, 0, 1 });
 
-            // Transition source image to transfer source layout
-            VkImageLayout srcLayout = ((VKTexture2D*)texture)->GetImageLayout();
+            // Transition swapchain image from present to transfer source layout
             VKUtilities::InsertImageMemoryBarrier(
                 copyCmd,
                 srcImage,
                 VK_ACCESS_MEMORY_READ_BIT,
                 VK_ACCESS_TRANSFER_READ_BIT,
-                srcLayout,
+                VK_IMAGE_LAYOUT_PRESENT_SRC_KHR,
                 VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL,
                 VK_PIPELINE_STAGE_TRANSFER_BIT,
                 VK_PIPELINE_STAGE_TRANSFER_BIT,
@@ -326,14 +321,14 @@ namespace Lumos
                 VK_PIPELINE_STAGE_TRANSFER_BIT,
                 VkImageSubresourceRange { VK_IMAGE_ASPECT_COLOR_BIT, 0, 1, 0, 1 });
 
-            // Transition back the source image after the blit is done
+            // Transition back the swap chain image after the blit is done
             VKUtilities::InsertImageMemoryBarrier(
                 copyCmd,
                 srcImage,
                 VK_ACCESS_TRANSFER_READ_BIT,
                 VK_ACCESS_MEMORY_READ_BIT,
                 VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL,
-                srcLayout,
+                VK_IMAGE_LAYOUT_PRESENT_SRC_KHR,
                 VK_PIPELINE_STAGE_TRANSFER_BIT,
                 VK_PIPELINE_STAGE_TRANSFER_BIT,
                 VkImageSubresourceRange { VK_IMAGE_ASPECT_COLOR_BIT, 0, 1, 0, 1 });
@@ -350,6 +345,17 @@ namespace Lumos
             vkMapMemory(VKDevice::Get().GetDevice(), dstImageMemory, 0, VK_WHOLE_SIZE, 0, &mapped);
             uint8_t* data = static_cast<uint8_t*>(mapped) + subResourceLayout.offset;
 
+            /*
+std::ofstream file(path, std::ios::out | std::ios::binary);
+
+// ppm header
+file << "P6\n"
+     << texture->GetWidth() << "\n"
+     << texture->GetHeight() << "\n"
+                    << 255 << "\n";
+
+            */
+
             // If source is BGR (destination is always RGB) and we can't use blit (which does automatic conversion), we'll have to manually swizzle color components
             bool colorSwizzle = false;
             // Check if source is BGR
@@ -360,26 +366,26 @@ namespace Lumos
                 colorSwizzle                 = (Algorithms::FindIf(formatsBGR.begin(), formatsBGR.end(), ((VKTexture2D*)texture)->GetVKFormat()) != formatsBGR.end());
             }
 
-            stbi_flip_vertically_on_write(0);
+            stbi_flip_vertically_on_write(1);
 
             uint32_t width  = texture->GetWidth();
             uint32_t height = texture->GetHeight();
 
             // Create directory if needed
             // LINFO("Creating Directories: %s", path.c_str());
-            auto fsPath = std::filesystem::path(path);
-            if(fsPath.has_parent_path())
-            {
-                try
-                {
-                    std::filesystem::create_directories(fsPath.parent_path());
-                    LINFO("Created Directory : %s", path.c_str());
-                }
-                catch(const std::filesystem::filesystem_error& e)
-                {
-                    LERROR("Error creating directory : %s", e.what());
-                }
-            }
+            /*   if(std::filesystem::path(getDocumentsDirectory() / path).has_parent_path())
+               {
+                   try
+                   {
+                       std::filesystem::create_directories(std::filesystem::path(getDocumentsDirectory() / path));
+                       LINFO("Created Directory : %s", path.c_str());
+                   }
+                   catch(const std::filesystem::filesystem_error& e)
+                   {
+                       LERROR("Error creating directory : %s", e.what());
+                   }
+               }
+   */
 
             uint8_t* outputImage = data;
 
@@ -401,6 +407,29 @@ namespace Lumos
 
             if(Blur)
                 delete[] outputImage;
+            /*
+
+for(uint32_t y = 0; y < texture->GetHeight(); y++)
+{
+    unsigned int* row = (unsigned int*)data;
+    for(uint32_t x = 0; x < texture->GetWidth(); x++)
+    {
+        if(colorSwizzle)
+        {
+            file.write((char*)row + 2, 1);
+            file.write((char*)row + 1, 1);
+            file.write((char*)row, 1);
+        }
+        else
+        {
+            file.write((char*)row, 3);
+        }
+        row++;
+    }
+    data += subResourceLayout.rowPitch;
+}
+file.close();
+*/
 
             LINFO("Screenshot saved to disk");
 
@@ -448,15 +477,6 @@ namespace Lumos
             vkCmdDrawIndexed(static_cast<VKCommandBuffer*>(commandBuffer)->GetHandle(), count, 1, 0, 0, 0);
         }
 
-        void VKRenderer::DrawIndexedInstancedInternal(CommandBuffer* commandBuffer, DrawType type, uint32_t indexCount, uint32_t instanceCount, uint32_t firstInstance) const
-        {
-            LUMOS_PROFILE_FUNCTION_LOW();
-            Engine::Get().Statistics().NumDrawCalls++;
-            Engine::Get().Statistics().TriangleCount += (indexCount * instanceCount) / 3;
-
-            vkCmdDrawIndexed(static_cast<VKCommandBuffer*>(commandBuffer)->GetHandle(), indexCount, instanceCount, 0, 0, firstInstance);
-        }
-
         void VKRenderer::DrawInternal(CommandBuffer* commandBuffer, DrawType type, uint32_t count, DataType datayType, void* indices) const
         {
             LUMOS_PROFILE_FUNCTION_LOW();
@@ -501,7 +521,7 @@ namespace Lumos
             //            }
         }
 
-        void VKRenderer::DrawSplashScreen(Texture* texture, const float* bgColour)
+        void VKRenderer::DrawSplashScreen(Texture* texture)
         {
             LUMOS_PROFILE_FUNCTION();
             TDArray<TextureType> attachmentTypes;
@@ -521,13 +541,7 @@ namespace Lumos
             renderPassDesc.DebugName       = "Splash Screen Pass";
             renderPassDesc.swapchainTarget = true;
 
-            float defaultColour[4] = { 40.0f / 256.0f, 42.0f / 256.0f, 54.0f / 256.0f, 1.0f };
-            float clearColour[4];
-            const float* colour = bgColour ? bgColour : defaultColour;
-            clearColour[0] = colour[0];
-            clearColour[1] = colour[1];
-            clearColour[2] = colour[2];
-            clearColour[3] = colour[3];
+            float clearColour[4] = { 40.0f / 256.0f, 42.0f / 256.0f, 54.0f / 256.0f, 1.0f };
 
             int32_t width  = Application::Get().GetWindow()->GetWidth();
             int32_t height = Application::Get().GetWindow()->GetHeight();
@@ -641,7 +655,7 @@ namespace Lumos
             }
             else
             {
-                return CreatePool(VKDevice::Get().GetDevice(), 500, VK_DESCRIPTOR_POOL_CREATE_FREE_DESCRIPTOR_SET_BIT);
+                return CreatePool(VKDevice::Get().GetDevice(), 100, VK_DESCRIPTOR_POOL_CREATE_FREE_DESCRIPTOR_SET_BIT);
             }
         }
 

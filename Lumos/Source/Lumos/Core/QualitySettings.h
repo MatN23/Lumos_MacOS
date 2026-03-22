@@ -21,7 +21,7 @@ namespace Lumos
     struct QualitySettings
     {
 #ifdef LUMOS_PLATFORM_MACOS
-        float RendererScale = 1.0f;
+        float RendererScale = 1.0f; // Keep at 1 until fix ui input with this
 #else
         float RendererScale = 1.0f;
 
@@ -32,7 +32,7 @@ namespace Lumos
         ShadowResolutionSetting ShadowResolution = ShadowResolutionSetting::Low;
 
         // Post-Process
-        bool EnableBloom = true;
+        bool EnableBloom = false;
         bool EnableDOF   = false;
         bool EnableSSR   = false;
         bool EnableSSAO  = false;
@@ -73,7 +73,7 @@ namespace Lumos
                 EnableBloom = true;
                 EnableDOF   = false;
                 EnableSSR   = false;
-                EnableSSAO  = true;
+                EnableSSAO  = false;
                 EnableFXAA  = true;
                 break;
             }

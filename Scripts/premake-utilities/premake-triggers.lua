@@ -40,13 +40,6 @@ newoption
 	description = "Target tvOS"
 }
 
-newoption
-{
-	trigger     = "game-project",
-	value       = "path",
-	description = "Path to game project directory to bundle into standalone app"
-}
-
 newaction
 {
 	trigger     = "clean",

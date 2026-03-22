@@ -83,10 +83,6 @@ namespace Lumos
         void SetScrollOffsetX(float offset) { m_ScrollOffsetX = offset; }
         float GetScrollOffsetX() const { return m_ScrollOffsetX; }
 
-        // Clipboard
-        void SetClipboard(const char* text);
-        std::string GetClipboard();
-
         // Gesture state
         bool GetGesturePinchActive() const { return m_GesturePinchActive; }
         float GetGesturePinchScale() const { return m_GesturePinchScale; }

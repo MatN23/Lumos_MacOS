@@ -1,7 +1,6 @@
 #pragma once
 #include "Core/LMLog.h"
 #include "Core/DataStructures/TDArray.h"
-
 #include <cstring>
 #include <string>
 
@@ -439,19 +438,16 @@ namespace Lumos
         {
             bool flipX;
             bool flipY;
-            bool storePixelData; // keep CPU-side pixel copy after GPU upload
 
             TextureLoadOptions()
             {
-                flipX          = false;
-                flipY          = false;
-                storePixelData = false;
+                flipX = false;
+                flipY = false;
             }
 
-            TextureLoadOptions(bool flipX, bool flipY, bool storePixelData = false)
+            TextureLoadOptions(bool flipX, bool flipY)
                 : flipX(flipX)
                 , flipY(flipY)
-                , storePixelData(storePixelData)
             {
             }
         };

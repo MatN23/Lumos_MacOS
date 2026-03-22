@@ -75,13 +75,6 @@ namespace Lumos
                 m_Name = name;
             }
 
-            const uint8_t* GetPixelData() const override { return m_Data; }
-
-            void SetFilepath(const std::string& path) override
-            {
-                m_FileName = path;
-            }
-
             void BuildTexture();
             void Resize(uint32_t width, uint32_t height) override;
 
@@ -145,7 +138,7 @@ namespace Lumos
             VkImageView GetMipImageView(uint32_t mip);
 
             VkImageLayout GetImageLayout() const { return m_ImageLayout; }
-            TextureDesc GetTextureParameters() const override { return m_Parameters; }
+            const TextureDesc& GetTextureParameters() const { return m_Parameters; }
             void TransitionImage(VkImageLayout newLayout, VKCommandBuffer* commandBuffer = nullptr);
             static void MakeDefault();
 

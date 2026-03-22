@@ -15,7 +15,6 @@
 #include "Physics/LumosPhysicsEngine/CollisionShapes/PyramidCollisionShape.h"
 #include "Physics/LumosPhysicsEngine/CollisionShapes/HullCollisionShape.h"
 #include "Physics/LumosPhysicsEngine/CollisionShapes/CapsuleCollisionShape.h"
-#include "Physics/LumosPhysicsEngine/CollisionShapes/TerrainCollisionShape.h"
 
 #include "Events/Event.h"
 #include "Events/ApplicationEvent.h"
@@ -57,14 +56,12 @@ CEREAL_REGISTER_TYPE(Lumos::CuboidCollisionShape);
 CEREAL_REGISTER_TYPE(Lumos::PyramidCollisionShape);
 CEREAL_REGISTER_TYPE(Lumos::HullCollisionShape);
 CEREAL_REGISTER_TYPE(Lumos::CapsuleCollisionShape);
-CEREAL_REGISTER_TYPE(Lumos::TerrainCollisionShape);
 
 CEREAL_REGISTER_POLYMORPHIC_RELATION(Lumos::CollisionShape, Lumos::SphereCollisionShape);
 CEREAL_REGISTER_POLYMORPHIC_RELATION(Lumos::CollisionShape, Lumos::CuboidCollisionShape);
 CEREAL_REGISTER_POLYMORPHIC_RELATION(Lumos::CollisionShape, Lumos::PyramidCollisionShape);
 CEREAL_REGISTER_POLYMORPHIC_RELATION(Lumos::CollisionShape, Lumos::HullCollisionShape);
 CEREAL_REGISTER_POLYMORPHIC_RELATION(Lumos::CollisionShape, Lumos::CapsuleCollisionShape);
-CEREAL_REGISTER_POLYMORPHIC_RELATION(Lumos::CollisionShape, Lumos::TerrainCollisionShape);
 
 #define MIN_SCENE_VERSION 24
 
@@ -380,8 +377,17 @@ namespace Lumos
     {
         LUMOS_PROFILE_FUNCTION();
         LINFO("Scene saved - %s", filePath.c_str());
+        
+        if(!m_EntityManager)
+        {
+            LERROR("EntityManager is null for scene %s", m_SceneName.c_str());
+            return;
+        }
+
         ArenaTemp scratch = ScratchBegin(0, 0);
         String8 path      = PushStr8F(scratch.arena, "%s%s%s", filePath.c_str(), m_SceneName.c_str(), binary ? (const char*)Str8Lit(".bin").str : (const char*)Str8Lit(".lsn").str);
+
+        LINFO("Serialising to path: %s", (const char*)path.str);
 
         m_SceneSerialisationVersion = SceneSerialisationVersion;
 
@@ -527,21 +533,12 @@ namespace Lumos
             }
             try
             {
-                String8 data;
-                {
-                    LUMOS_PROFILE_SCOPE("Scene::Deserialise::ReadFile");
-                    data = FileSystem::ReadTextFile(scratch.arena, path);
-                }
+                String8 data = FileSystem::ReadTextFile(scratch.arena, path);
                 std::istringstream istr;
                 istr.str((const char*)data.str);
                 cereal::JSONInputArchive input(istr);
-                {
-                    LUMOS_PROFILE_SCOPE("Scene::Deserialise::ParseSceneSettings");
-                    input(*this);
-                }
+                input(*this);
 
-                {
-                    LUMOS_PROFILE_SCOPE("Scene::Deserialise::SnapshotLoad");
                 if(m_SceneSerialisationVersion == 0)
                     LERROR("Invalid Scene Version - Invalid Scene Version");
                 else if(m_SceneSerialisationVersion < MIN_SCENE_VERSION)
@@ -588,7 +585,6 @@ namespace Lumos
 #endif
                 else if(m_SceneSerialisationVersion >= 25)
                     entt::snapshot_loader { m_EntityManager->GetRegistry() }.get<entt::entity>(input).ALL_COMPONENTSENTTV10(input);
-                }
 #if MIN_SCENE_VERSION <= 6
                 if(m_SceneSerialisationVersion < 6)
                 {

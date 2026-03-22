@@ -2,8 +2,11 @@
 #include "LoadImage.h"
 
 #include "Core/OS/FileSystem.h"
-#include "Core/Asset/LImgReader.h"
 #include "Utilities/StringUtilities.h"
+#include <cstdlib>
+#include <filesystem>
+#include <functional>
+#include <vector>
 
 #ifdef FREEIMAGE
 #include <FreeImage.h>
@@ -20,6 +23,106 @@
 
 namespace Lumos
 {
+    namespace
+    {
+#if defined(LUMOS_PLATFORM_WINDOWS)
+        std::string QuoteShellArg(const std::string& value)
+        {
+            std::string out = "\"";
+            for(char c : value)
+            {
+                if(c == '\"')
+                    out += "\\\"";
+                else
+                    out += c;
+            }
+            out += "\"";
+            return out;
+        }
+#else
+        std::string QuoteShellArg(const std::string& value)
+        {
+            std::string out = "'";
+            for(char c : value)
+            {
+                if(c == '\'')
+                    out += "'\"'\"'";
+                else
+                    out += c;
+            }
+            out += "'";
+            return out;
+        }
+#endif
+
+        bool IsEXRPath(const std::string& filePath)
+        {
+            return StringUtilities::ToLower(StringUtilities::GetFilePathExtension(filePath)) == "exr";
+        }
+
+        std::string GetEXRConversionOutputPath(const std::string& sourcePath)
+        {
+            namespace fs = std::filesystem;
+            std::error_code ec;
+
+            fs::path cacheDir = fs::temp_directory_path(ec);
+            if(ec)
+                cacheDir = ".";
+
+            cacheDir /= "lumos_exr_cache";
+            fs::create_directories(cacheDir, ec);
+
+            const auto hash = std::hash<std::string> {}(sourcePath);
+            fs::path outPath = cacheDir / (fs::path(sourcePath).stem().string() + "_" + std::to_string(hash) + ".png");
+            return outPath.string();
+        }
+
+        bool TryConvertEXRToPNG(const std::string& sourcePath, std::string& outPath)
+        {
+            namespace fs = std::filesystem;
+            std::error_code ec;
+
+            outPath = GetEXRConversionOutputPath(sourcePath);
+            fs::path source(sourcePath);
+            fs::path output(outPath);
+
+            if(fs::exists(output, ec))
+            {
+                std::error_code srcTimeError, dstTimeError;
+                const auto srcTime = fs::last_write_time(source, srcTimeError);
+                const auto dstTime = fs::last_write_time(output, dstTimeError);
+                if(!srcTimeError && !dstTimeError && dstTime >= srcTime)
+                    return true;
+            }
+
+#if defined(LUMOS_PLATFORM_WINDOWS)
+            const std::string suppressOutput = " >NUL 2>NUL";
+#else
+            const std::string suppressOutput = " >/dev/null 2>&1";
+#endif
+
+            const std::string quotedIn  = QuoteShellArg(sourcePath);
+            const std::string quotedOut = QuoteShellArg(outPath);
+
+            const std::vector<std::string> commands = {
+#if defined(LUMOS_PLATFORM_MACOS)
+                "sips -s format png " + quotedIn + " --out " + quotedOut + suppressOutput,
+#endif
+                "magick " + quotedIn + " " + quotedOut + suppressOutput,
+                "oiiotool " + quotedIn + " -o " + quotedOut + suppressOutput,
+                "ffmpeg -y -loglevel error -i " + quotedIn + " " + quotedOut + suppressOutput
+            };
+
+            for(const auto& command : commands)
+            {
+                if(std::system(command.c_str()) == 0 && fs::exists(output, ec))
+                    return true;
+            }
+
+            return false;
+        }
+    } // namespace
+
 
     static uint32_t s_MaxWidth  = 0;
     static uint32_t s_MaxHeight = 0;
@@ -42,42 +145,38 @@ namespace Lumos
             return nullptr;
         }
 
-        // Fast path for .limg pre-decoded format
+        std::string pathToLoad = std::string((const char*)physicalPath.str, physicalPath.size);
+        if(IsEXRPath(pathToLoad))
         {
-            std::string ext = StringUtilities::GetFilePathExtension(std::string(filename));
-            if(ext == "limg")
+            std::string convertedPath;
+            if(TryConvertEXRToPNG(pathToLoad, convertedPath))
             {
-                LImgReadResult imgResult = {};
-                if(LImgReader::Read((const char*)physicalPath.str, imgResult))
-                {
-                    if(width)  *width  = imgResult.Width;
-                    if(height) *height = imgResult.Height;
-                    if(bits)   *bits   = imgResult.Bits;
-                    if(isHDR)  *isHDR  = imgResult.IsHDR;
-                    ScratchEnd(Scratch);
-                    return imgResult.Pixels;
-                }
+                pathToLoad = convertedPath;
+            }
+            else
+            {
+                LWARN("Could not convert EXR image '%s'. Falling back to checkerboard texture.", filename);
             }
         }
 
-        if(stbi_is_hdr((const char*)physicalPath.str))
+        if(stbi_is_hdr(pathToLoad.c_str()))
         {
             sizeOfChannel = 32;
-            pixels        = (uint8_t*)stbi_loadf((const char*)physicalPath.str, &texWidth, &texHeight, &texChannels, STBI_rgb_alpha);
+            pixels        = (uint8_t*)stbi_loadf(pathToLoad.c_str(), &texWidth, &texHeight, &texChannels, STBI_rgb_alpha);
 
             if(isHDR)
                 *isHDR = true;
         }
         else
         {
-            pixels = stbi_load((const char*)physicalPath.str, &texWidth, &texHeight, &texChannels, STBI_rgb_alpha);
+            pixels = stbi_load(pathToLoad.c_str(), &texWidth, &texHeight, &texChannels, STBI_rgb_alpha);
 
             if(isHDR)
                 *isHDR = false;
         }
 
         // Resize the image if it exceeds the maximum width or height
-        if(!isHDR && s_MaxWidth > 0 && s_MaxHeight > 0 && ((uint32_t)texWidth > s_MaxWidth || (uint32_t)texHeight > s_MaxHeight))
+        if((!isHDR || !(*isHDR)) && s_MaxWidth > 0 && s_MaxHeight > 0 && ((uint32_t)texWidth > s_MaxWidth || (uint32_t)texHeight > s_MaxHeight))
         {
             uint32_t texWidthOld = texWidth, texHeightOld = texHeight;
             float aspectRatio = static_cast<float>(texWidth) / static_cast<float>(texHeight);
@@ -96,7 +195,7 @@ namespace Lumos
             int resizedChannels    = texChannels;
             uint8_t* resizedPixels = (stbi_uc*)malloc(texWidth * texHeight * resizedChannels);
 
-            if(isHDR)
+            if(isHDR && *isHDR)
             {
                 stbir_resize_float_linear((float*)pixels, texWidthOld, texHeightOld, 0, (float*)resizedPixels, texWidth, texHeight, 0, STBIR_RGBA);
             }
@@ -161,12 +260,21 @@ namespace Lumos
 
     uint8_t* LoadImageFromFile(const std::string& filename, uint32_t* width, uint32_t* height, uint32_t* bits, bool* isHDR, bool flipY, bool srgb)
     {
-        return LoadImageFromFile(filename.c_str(), width, height, bits, isHDR, srgb, flipY);
+        return LoadImageFromFile(filename.c_str(), width, height, bits, isHDR, flipY, srgb);
     }
 
     bool LoadImageFromFile(ImageLoadDesc& desc)
     {
         LUMOS_PROFILE_FUNCTION();
+        desc.outPixels = nullptr;
+        desc.outWidth  = 0;
+        desc.outHeight = 0;
+        desc.outBits   = 0;
+        desc.isHDR     = false;
+
+        if(!desc.filePath)
+            return false;
+
         stbi_uc* pixels = nullptr;
         int texWidth = 0, texHeight = 0, texChannels = 0;
         int sizeOfChannel = 8;
@@ -181,27 +289,20 @@ namespace Lumos
             ScratchEnd(Scratch);
             return false;
         }
-        desc.filePath = (const char*)physicalPath.str;
-
-        // Fast path for .limg pre-decoded format
+        std::string pathToLoad = std::string((const char*)physicalPath.str, physicalPath.size);
+        if(IsEXRPath(pathToLoad))
         {
-            std::string ext = StringUtilities::GetFilePathExtension(std::string(desc.filePath));
-            if(ext == "limg")
+            std::string convertedPath;
+            if(TryConvertEXRToPNG(pathToLoad, convertedPath))
             {
-                LImgReadResult imgResult = {};
-                if(LImgReader::Read(desc.filePath, imgResult))
-                {
-                    desc.outWidth  = imgResult.Width;
-                    desc.outHeight = imgResult.Height;
-                    desc.outBits   = imgResult.Bits;
-                    desc.isHDR     = imgResult.IsHDR;
-                    desc.outPixels = imgResult.Pixels;
-                    ScratchEnd(Scratch);
-                    return true;
-                }
-                // Fall through to stbi if limg read fails
+                pathToLoad = convertedPath;
+            }
+            else
+            {
+                LWARN("Could not convert EXR image '%s'. Falling back to checkerboard texture.", desc.filePath);
             }
         }
+        desc.filePath = pathToLoad.c_str();
 
         if(stbi_is_hdr(desc.filePath))
         {

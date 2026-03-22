@@ -4,13 +4,14 @@
 
 #include "Platform/Vulkan/VKSwapChain.h"
 #include "Core/OS/Window.h"
+#include <string>
 #include "Core/Application.h"
 #undef _GLFW_REQUIRE_LOADER
 #define GLFW_EXPOSE_NATIVE_COCOA
 #include <GLFW/glfw3.h>
 #include <GLFW/glfw3native.h>
+#include <dlfcn.h>
 
-#undef VK_NO_PROTOTYPES
 #include <MoltenVK/vk_mvk_moltenvk.h>
 
 
@@ -52,10 +53,25 @@ namespace Lumos
         if (res != VK_SUCCESS || surface == VK_NULL_HANDLE)
         LFATAL("Failed to create Vulkan surface: %s",std::to_string(res).c_str());
 
+        void* libMoltenVK = dlopen("/usr/local/lib/libMoltenVK.dylib", RTLD_NOW | RTLD_LOCAL);
+        if (!libMoltenVK)
+            LERROR("dlopen failed: %s", dlerror());
+
+		auto getMoltenVKConfigurationMVK = (PFN_vkGetMoltenVKConfigurationMVK)
+			dlsym(libMoltenVK, "vkGetMoltenVKConfigurationMVK");
+		auto setMoltenVKConfigurationMVK = (PFN_vkSetMoltenVKConfigurationMVK)
+			dlsym(libMoltenVK, "vkSetMoltenVKConfigurationMVK");
+
+		if (!getMoltenVKConfigurationMVK || !setMoltenVKConfigurationMVK)
+            LERROR("MoltenVK config entrypoints not found");
+
 		MVKConfiguration mvkConfig;
         size_t pConfigurationSize = sizeof(MVKConfiguration);
-        vkGetMoltenVKConfigurationMVK(vkInstance, &mvkConfig, &pConfigurationSize);
-        
+        getMoltenVKConfigurationMVK(vkInstance, &mvkConfig, &pConfigurationSize);
+		#ifndef LUMOS_PLATFORM_PRODUCTION
+        mvkConfig.debugMode = true;
+		#endif
+
 		//mvkConfig.traceVulkanCalls = MVK_CONFIG_TRACE_VULKAN_CALLS_DURATION;
 		mvkConfig.performanceTracking = false;
         mvkConfig.synchronousQueueSubmits = false;
@@ -63,13 +79,8 @@ namespace Lumos
         //mvkConfig.prefillMetalCommandBuffers = true;
 		//mvkConfig.useMetalArgumentBuffers = MVKUseMetalArgumentBuffers::MVK_CONFIG_USE_METAL_ARGUMENT_BUFFERS_ALWAYS;
         mvkConfig.resumeLostDevice = true;
-        //mvkConfig.logLevel = MVKConfigLogLevel::MVK_CONFIG_LOG_LEVEL_INFO;
-        //mvkConfig.debugMode = true;
 
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wdeprecated-declarations"
-        vkSetMoltenVKConfigurationMVK(vkInstance, &mvkConfig, &pConfigurationSize);
-#pragma clang diagnostic pop
+        setMoltenVKConfigurationMVK(vkInstance, &mvkConfig, &pConfigurationSize);
 #ifdef MVK_VERSION_STRING
         LINFO("MVK Version %s", MVK_VERSION_STRING);
 #endif

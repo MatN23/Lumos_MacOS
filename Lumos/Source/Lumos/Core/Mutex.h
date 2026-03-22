@@ -6,8 +6,6 @@
 #include <pthread.h>
 #endif
 
-#include <time.h>
-
 namespace Lumos
 {
     struct Mutex

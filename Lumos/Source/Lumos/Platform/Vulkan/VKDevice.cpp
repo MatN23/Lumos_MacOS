@@ -1,3 +1,4 @@
+// Forced rebuild to pick up Tracy header changes
 #include "Precompiled.h"
 
 #include "Core/Application.h"
@@ -162,7 +163,7 @@ namespace Lumos
             vkGetPhysicalDeviceProperties(m_Handle, &m_PhysicalDeviceProperties);
             vkGetPhysicalDeviceMemoryProperties(m_Handle, &m_MemoryProperties);
 
-#if !defined(LUMOS_PLATFORM_IOS) && !defined(LUMOS_PLATFORM_MACOS)
+#ifndef LUMOS_PLATFORM_IOS
             LINFO("Volk Header Version : %i", VOLK_HEADER_VERSION);
 #endif
             LINFO("Vulkan : %i.%i.%i", VK_API_VERSION_MAJOR(m_PhysicalDeviceProperties.apiVersion), VK_API_VERSION_MINOR(m_PhysicalDeviceProperties.apiVersion), VK_API_VERSION_PATCH(m_PhysicalDeviceProperties.apiVersion));
@@ -181,7 +182,7 @@ namespace Lumos
             caps.MaxAnisotropy                = m_PhysicalDeviceProperties.limits.maxSamplerAnisotropy;
             caps.MaxTextureUnits              = m_PhysicalDeviceProperties.limits.maxDescriptorSetSamplers;
             caps.UniformBufferOffsetAlignment = int(m_PhysicalDeviceProperties.limits.minUniformBufferOffsetAlignment);
-            caps.SupportCompute               = true;
+            caps.SupportCompute               = false; // true; //Need to sort descriptor set management first
 
             uint32_t queueFamilyCount;
             vkGetPhysicalDeviceQueueFamilyProperties(m_Handle, &queueFamilyCount, nullptr);
@@ -262,7 +263,6 @@ namespace Lumos
 
         VKPhysicalDevice::~VKPhysicalDevice()
         {
-            HashSetDeinit(&m_SupportedExtensions);
         }
 
         bool VKPhysicalDevice::IsExtensionSupported(String8 extensionName) const
@@ -389,9 +389,7 @@ namespace Lumos
 
         VKDevice::~VKDevice()
         {
-            LINFO("Destroying VKDevice");
             m_CommandPool.reset();
-            SavePipelineCache();
             vkDestroyPipelineCache(m_Device, m_PipelineCache, VK_NULL_HANDLE);
 
 #ifdef USE_VMA_ALLOCATOR
@@ -625,58 +623,10 @@ namespace Lumos
         {
             LINFO("Creating VK Pipeline Cache");
 
-            m_PipelineCachePath = Application::Get().GetProjectSettings().m_ProjectRoot + "pipeline_cache.bin";
-
             VkPipelineCacheCreateInfo pipelineCacheCI = {};
             pipelineCacheCI.sType                     = VK_STRUCTURE_TYPE_PIPELINE_CACHE_CREATE_INFO;
             pipelineCacheCI.pNext                     = NULL;
-
-            // Load existing cache from disk
-            uint8_t* cacheData = nullptr;
-            FILE* f            = fopen(m_PipelineCachePath.c_str(), "rb");
-            if(f)
-            {
-                fseek(f, 0, SEEK_END);
-                long size = ftell(f);
-                fseek(f, 0, SEEK_SET);
-                if(size > 0)
-                {
-                    cacheData = (uint8_t*)malloc(size);
-                    fread(cacheData, 1, size, f);
-                    pipelineCacheCI.initialDataSize = (size_t)size;
-                    pipelineCacheCI.pInitialData    = cacheData;
-                    LINFO("Loaded pipeline cache: %ld bytes", size);
-                }
-                fclose(f);
-            }
-
             VK_CHECK_RESULT(vkCreatePipelineCache(m_Device, &pipelineCacheCI, VK_NULL_HANDLE, &m_PipelineCache));
-
-            if(cacheData)
-                free(cacheData);
-        }
-
-        void VKDevice::SavePipelineCache()
-        {
-            if(m_PipelineCachePath.empty())
-                return;
-
-            size_t cacheSize = 0;
-            VK_CHECK_RESULT(vkGetPipelineCacheData(m_Device, m_PipelineCache, &cacheSize, nullptr));
-            if(cacheSize == 0)
-                return;
-
-            uint8_t* cacheData = (uint8_t*)malloc(cacheSize);
-            VK_CHECK_RESULT(vkGetPipelineCacheData(m_Device, m_PipelineCache, &cacheSize, cacheData));
-
-            FILE* f = fopen(m_PipelineCachePath.c_str(), "wb");
-            if(f)
-            {
-                fwrite(cacheData, 1, cacheSize, f);
-                fclose(f);
-                LINFO("Saved pipeline cache: %zu bytes", cacheSize);
-            }
-            free(cacheData);
         }
 
         void VKDevice::CreateTracyContext()

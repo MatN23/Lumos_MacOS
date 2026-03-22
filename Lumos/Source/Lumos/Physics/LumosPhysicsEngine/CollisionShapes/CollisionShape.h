@@ -38,10 +38,7 @@ namespace Lumos
         CollisionPyramid      = 4,
         CollisionCapsule      = 8,
         CollisionHull         = 16,
-        CollisionCompound     = 32,
-        CollisionTerrain      = 64,
-        CollisionMesh         = 128,
-        CollisionShapeTypeMax = 256
+        CollisionShapeTypeMax = 32
     };
 
     class LUMOS_EXPORT CollisionShape

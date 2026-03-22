@@ -18,8 +18,6 @@
 #include <Lumos/ImGui/ImGuiManager.h>
 #include <Lumos/Core/Thread.h>
 #include <Lumos/Core/Asset/AssetManager.h>
-#include <Lumos/Core/Asset/AssetImporter.h>
-#include <Lumos/Scene/Component/ModelComponent.h>
 
 #ifdef LUMOS_PLATFORM_WINDOWS
 #include <Shellapi.h>
@@ -60,14 +58,14 @@ namespace Lumos
         { "bmp", FileType::Texture },
         { "gif", FileType::Texture },
         { "tga", FileType::Texture },
-        { "limg", FileType::Texture },
+        { "exr", FileType::Texture },
         { "ttf", FileType::Font },
         { "hdr", FileType::Cubemap },
         { "obj", FileType::Model },
         { "fbx", FileType::Model },
         { "gltf", FileType::Model },
         { "glb", FileType::Model },
-        { "lmesh", FileType::Model },
+        { "blend", FileType::Model },
         { "mp3", FileType::Audio },
         { "m4a", FileType::Audio },
         { "wav", FileType::Audio },
@@ -122,24 +120,13 @@ namespace Lumos
 
         String8 assetsBasePath;
         FileSystem::Get().ResolvePhysicalPath(m_Arena, Str8Lit("//Assets"), &assetsBasePath);
-        if(assetsBasePath.str)
-            m_AssetPath = PushStr8Copy(m_Arena, Str8C((char*)std::filesystem::path((const char*)assetsBasePath.str).string().c_str()));
-        else
-            m_AssetPath = m_BasePath;
+        m_AssetPath = PushStr8Copy(m_Arena, Str8C((char*)std::filesystem::path((const char*)assetsBasePath.str).string().c_str()));
 
-        try
-        {
-            String8 baseDirectoryHandle = ProcessDirectory(m_BasePath, nullptr, true);
-            m_BaseProjectDir            = m_Directories[baseDirectoryHandle];
-            ChangeDirectory(m_BaseProjectDir);
-            m_CurrentDir = m_BaseProjectDir;
-        }
-        catch(...)
-        {
-            LWARN("Failed to process project directory");
-            m_BaseProjectDir = nullptr;
-            m_CurrentDir     = nullptr;
-        }
+        String8 baseDirectoryHandle = ProcessDirectory(m_BasePath, nullptr, true);
+        m_BaseProjectDir            = m_Directories[baseDirectoryHandle];
+        ChangeDirectory(m_BaseProjectDir);
+
+        m_CurrentDir = m_BaseProjectDir;
 
         m_UpdateNavigationPath = true;
         m_IsDragging           = false;
@@ -213,8 +200,7 @@ namespace Lumos
         String8 absolutePath = StringUtilities::RelativeToAbsolutePath(temp.arena, directoryPath, Str8Lit("//Assets"), m_BasePath);
         auto stdPath         = std::filesystem::path(std::string((const char*)absolutePath.str, absolutePath.size));
 
-        std::error_code ec;
-        SharedPtr<DirectoryInformation> directoryInfo = directory ? directory : CreateSharedPtr<DirectoryInformation>(directoryPath, !std::filesystem::is_directory(stdPath, ec));
+        SharedPtr<DirectoryInformation> directoryInfo = directory ? directory : CreateSharedPtr<DirectoryInformation>(directoryPath, !std::filesystem::is_directory(stdPath));
         directoryInfo->Parent                         = parent;
 
         // TODO: create paths at max size and use free list
@@ -224,19 +210,18 @@ namespace Lumos
 
         ScratchEnd(temp);
 
-        if(std::filesystem::is_directory(stdPath, ec))
+        if(std::filesystem::is_directory(stdPath))
         {
             directoryInfo->IsFile = false;
             directoryInfo->Leaf   = true;
-            for(auto& entry : std::filesystem::directory_iterator(stdPath, ec))
+            for(auto& entry : std::filesystem::directory_iterator(stdPath))
             {
                 if(!m_ShowHiddenFiles && IsHidden(entry.path()))
                 {
                     continue;
                 }
 
-                if(Str8Match(directoryInfo->AssetPath, Str8Lit("//Assets/Cache"))
-                   || Str8Match(directoryInfo->AssetPath, Str8Lit("//Assets/Imported")))
+                if(Str8Match(directoryInfo->AssetPath, Str8Lit("//Assets/Cache")))
                 {
                     directoryInfo->Hidden = true;
                     continue;
@@ -263,13 +248,8 @@ namespace Lumos
 
             directoryInfo->IsFile   = true;
             directoryInfo->Type     = fileType;
-            std::error_code fsEc;
-            bool pathExists = std::filesystem::exists(stdPath, fsEc);
-            directoryInfo->FileSize = pathExists ? std::filesystem::file_size(stdPath, fsEc) : 0;
-            directoryInfo->Hidden   = pathExists ? IsHidden(stdPath) : true;
-
-            if(Str8Match(extension, Str8Lit("meta")))
-                directoryInfo->Hidden = true;
+            directoryInfo->FileSize = std::filesystem::exists(stdPath) ? std::filesystem::file_size(stdPath) : 0;
+            directoryInfo->Hidden   = std::filesystem::exists(stdPath) ? IsHidden(stdPath) : true;
             directoryInfo->Opened   = true;
             directoryInfo->Leaf     = true;
 
@@ -866,7 +846,7 @@ namespace Lumos
             if(CurrentEnty->IsFile)
             {
                 textureId                    = m_FileIcon;
-                static bool EnableThumbnails = true;
+                static bool EnableThumbnails = false;
                 if(EnableThumbnails)
                     switch(CurrentEnty->Type)
                     {
@@ -932,15 +912,9 @@ namespace Lumos
                                     CurrentEnty->Thumbnail = m_Editor->GetAssetManager()->GetAssetData(thumbnailAssetPath).As<Graphics::Texture2D>();
                                 textureId = CurrentEnty->Thumbnail ? CurrentEnty->Thumbnail : m_FileIcon;
                             }
-                            else if(!CurrentEnty->ThumbnailRequested)
+                            else
                             {
-                                CurrentEnty->ThumbnailRequested = true;
-                                std::string assetPathStd = ToStdString(CurrentEnty->AssetPath);
-                                std::string importedPath = AssetImporter::GetImportedPath(assetPathStd);
-                                if(!importedPath.empty() && FileSystem::Get().FileExistsVFS(Str8StdS(importedPath)))
-                                    m_Editor->RequestThumbnail(PushStr8Copy(scratch.arena, Str8StdS(importedPath)));
-                                else
-                                    m_Editor->RequestThumbnail(CurrentEnty->AssetPath);
+                                m_Editor->RequestThumbnail(CurrentEnty->AssetPath);
                                 textureId = m_FileIcon;
                             }
 
@@ -1048,41 +1022,6 @@ namespace Lumos
                 }
 
                 ImGui::Separator();
-
-                if(m_CurrentDir->Children[dirIndex]->IsFile && m_CurrentDir->Children[dirIndex]->Type == FileType::Model)
-                {
-                    std::string modelAssetPath = ToStdString(m_CurrentDir->Children[dirIndex]->AssetPath);
-                    bool isImported            = !AssetImporter::NeedsImport(modelAssetPath);
-
-                    if(isImported)
-                        ImGui::TextColored(ImVec4(0.2f, 0.8f, 0.2f, 1.0f), "Imported");
-                    else
-                        ImGui::TextColored(ImVec4(0.9f, 0.6f, 0.1f, 1.0f), "Not Imported");
-
-                    if(ImGui::Selectable("Reimport"))
-                    {
-                        ImportSettings settings;
-                        ImportMeta meta;
-                        if(AssetImporter::LoadMeta(modelAssetPath, meta))
-                            settings = meta.Settings;
-                        AssetImporter::Import(modelAssetPath, settings);
-                        Graphics::ModelComponent::ReloadSceneModels(modelAssetPath);
-                    }
-
-                    if(isImported)
-                    {
-                        std::string importedPath = AssetImporter::GetImportedPath(modelAssetPath);
-                        if(!importedPath.empty() && ImGui::Selectable("Open Imported Location"))
-                        {
-                            ArenaTemp temp       = ScratchBegin(&m_Arena, 1);
-                            String8 resolvedPath = StringUtilities::RelativeToAbsolutePath(temp.arena, Str8StdS(importedPath), Str8Lit("//Assets"), m_BasePath);
-                            OS::Get().OpenFileLocation(ToStdString(resolvedPath));
-                            ScratchEnd(temp);
-                        }
-                    }
-
-                    ImGui::Separator();
-                }
 
                 if(ImGui::Selectable("Import New Asset"))
                 {
@@ -1339,11 +1278,8 @@ namespace Lumos
         if(!std::filesystem::exists(basePath))
             return;
 
-        std::error_code ec;
-        for(auto& entry : std::filesystem::recursive_directory_iterator(basePath, ec))
+        for(auto& entry : std::filesystem::recursive_directory_iterator(basePath))
         {
-            if(ec)
-                break;
             if(entry.is_regular_file())
             {
                 std::string path = entry.path().string();
@@ -1353,9 +1289,7 @@ namespace Lumos
                     std::string relativePath = "//Assets" + path.substr(basePath.size());
                     // Skip hidden files and cache
                     if(relativePath.find("/.") == std::string::npos &&
-                       relativePath.find("/Cache/") == std::string::npos &&
-                       relativePath.find("/Imported/") == std::string::npos &&
-                       relativePath.rfind(".meta") != relativePath.size() - 5)
+                       relativePath.find("/Cache/") == std::string::npos)
                     {
                         outAssets.push_back(relativePath);
                     }

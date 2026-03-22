@@ -3,20 +3,11 @@ require 'Scripts/premake-utilities/premake-common'
 require 'Scripts/premake-utilities/premake-triggers'
 require 'Scripts/premake-utilities/premake-settings'
 require 'Scripts/premake-utilities/android_studio'
-require 'Scripts/premake-utilities/premake-project-config'
-
-newoption
-{
-	trigger = "shaderc",
-	description = "Build with shaderc (enables runtime shader compilation)"
-}
 
 include "premake-dependencies.lua"
 --require 'Scripts/premake-utilities/premake-vscode/vscode'
 
 root_dir = os.getcwd()
-
-LoadGameProject()
 
 Arch = ""
 
@@ -74,7 +65,6 @@ workspace( settings.workspace_name )
 			SetRecommendedSettings()
 		require("Lumos/External/SPIRVCrosspremake5")
 			SetRecommendedSettings()
-
 		require("Lumos/External/ModelLoaders/meshoptimizer/premake5")
 			SetRecommendedSettings()
 		require("Lumos/External/ozz-animation/premake5")
@@ -85,10 +75,6 @@ workspace( settings.workspace_name )
 			require("Lumos/External/GLFWpremake5")
 			SetRecommendedSettings()
 		end
-		if _OPTIONS["shaderc"] then
-			require("Lumos/External/shadercpremake5")
-			SetRecommendedSettings()
-		end
 
 	filter {}
 	group ""
@@ -97,11 +83,5 @@ workspace( settings.workspace_name )
 	   SetRecommendedSettings()
 	include "Runtime/premake5"
 		   SetRecommendedSettings()
-		   filter {"system:macosx or system:ios"}
-				xcodebuildsettings { ['SKIP_INSTALL'] = 'NO', ['INSTALL_PATH'] = '$(LOCAL_APPS_DIR)' }
-		   filter {}
 	include "Editor/premake5"
 		   SetRecommendedSettings()
-		   filter {"system:macosx or system:ios"}
-				xcodebuildsettings { ['SKIP_INSTALL'] = 'NO', ['INSTALL_PATH'] = '$(LOCAL_APPS_DIR)' }
-		   filter {}

@@ -110,13 +110,10 @@ namespace Lumos
             }
         }
 
-        static constexpr uint32_t FONT_ATLAS_VERSION = 1;
-
         struct AtlasHeader
         {
-            uint32_t Version = FONT_ATLAS_VERSION;
-            uint32_t Type    = 0;
-            uint32_t Width   = 0, Height = 0;
+            uint32_t Type  = 0;
+            uint32_t Width = 0, Height = 0;
         };
 
         static bool TryReadFontAtlasFromCache(const std::string& fontName, float fontSize, AtlasHeader& header, void*& pixels, Buffer& storageBuffer)
@@ -139,15 +136,6 @@ namespace Lumos
                 storageBuffer.Write(data, storageBuffer.Size);
 
                 header = *storageBuffer.As<AtlasHeader>();
-                if(header.Version != FONT_ATLAS_VERSION)
-                {
-                    FONT_LOG("Font atlas cache version mismatch (got %u, expected %u), regenerating", header.Version, FONT_ATLAS_VERSION);
-                    storageBuffer.Release();
-                    ArenaRelease(arena);
-                    std::filesystem::remove(filepath);
-                    ScratchEnd(scratch);
-                    return false;
-                }
                 pixels = (uint8_t*)storageBuffer.Data + sizeof(AtlasHeader);
                 ArenaRelease(arena);
 
@@ -263,13 +251,13 @@ namespace Lumos
             config.angleThreshold                            = DEFAULT_ANGLE_THRESHOLD;
             config.miterLimit                                = DEFAULT_MITER_LIMIT;
             config.imageType                                 = ImageType::MTSDF;
-            config.emSize                                    = 64;
+            config.emSize                                    = 40;
 
             const char* imageFormatName                                = nullptr;
             int fixedWidth                                             = -1;
             int fixedHeight                                            = -1;
             double minEmSize                                           = 0;
-            double rangeValue                                          = 12.0;
+            double rangeValue                                          = 8.0;
             TightAtlasPacker::DimensionsConstraint atlasSizeConstraint = TightAtlasPacker::DimensionsConstraint::MULTIPLE_OF_FOUR_SQUARE;
 
             // Load fonts

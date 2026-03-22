@@ -713,46 +713,33 @@ namespace Lumos
         return new Mesh(indices, data);
     }
 
-    static const char* PrimitiveNames[] = {
-        "Plane", "Quad", "Cube", "Pyramid", "Sphere", "Capsule", "Cylinder", "Terrain", "File", "None"
-    };
-
     Graphics::Mesh* Graphics::CreatePrimative(PrimitiveType type)
     {
-        Mesh* mesh = nullptr;
         switch(type)
         {
         case Graphics::PrimitiveType::Cube:
-            mesh = Graphics::CreateCube(); break;
+            return Graphics::CreateCube();
         case Graphics::PrimitiveType::Plane:
-            mesh = Graphics::CreatePlane(1.0f, 1.0f, Vec3(0.0f, 1.0f, 0.0f)); break;
+            return Graphics::CreatePlane(1.0f, 1.0f, Vec3(0.0f, 1.0f, 0.0f));
         case Graphics::PrimitiveType::Quad:
-            mesh = Graphics::CreateQuad(); break;
+            return Graphics::CreateQuad();
         case Graphics::PrimitiveType::Sphere:
-            mesh = Graphics::CreateSphere(); break;
+            return Graphics::CreateSphere();
         case Graphics::PrimitiveType::Pyramid:
-            mesh = Graphics::CreatePyramid(); break;
+            return Graphics::CreatePyramid();
         case Graphics::PrimitiveType::Capsule:
-            mesh = Graphics::CreateCapsule(); break;
+            return Graphics::CreateCapsule();
         case Graphics::PrimitiveType::Cylinder:
-            mesh = Graphics::CreateCylinder(); break;
+            return Graphics::CreateCylinder();
         case Graphics::PrimitiveType::Terrain:
-            mesh = Graphics::CreateTerrain(); break;
+            return Graphics::CreateTerrain();
         case Graphics::PrimitiveType::File:
             LWARN("Trying to create primitive of type File");
             return nullptr;
-        default:
-            LERROR("Primitive not supported");
-            return nullptr;
         }
 
-        if(mesh)
-        {
-            int idx = (int)type;
-            if(idx >= 0 && idx < (int)(sizeof(PrimitiveNames) / sizeof(PrimitiveNames[0])))
-                mesh->SetName(PrimitiveNames[idx]);
-        }
-        return mesh;
+        LERROR("Primitive not supported");
+        return nullptr;
     };
 
     Graphics::Mesh* Graphics::CreateTerrain()

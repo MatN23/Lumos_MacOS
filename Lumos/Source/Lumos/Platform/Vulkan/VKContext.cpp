@@ -192,8 +192,6 @@ namespace Lumos
 
             VKDevice::Release();
             vkDestroyInstance(s_VkInstance, nullptr);
-
-            VKRenderer::GetRenderer()->ClearDeletionQueues();
         }
 
         void VKContext::Init()
@@ -261,7 +259,7 @@ namespace Lumos
         void VKContext::CreateInstance()
         {
             LUMOS_PROFILE_FUNCTION();
-#ifdef LUMOS_VOLK
+#ifndef LUMOS_PLATFORM_IOS
             VK_CHECK_RESULT(volkInitialize());
 
             if(volkGetInstanceVersion() == 0)
@@ -344,7 +342,7 @@ namespace Lumos
             }
 
             VK_CHECK_RESULT(vkCreateInstance(&createInfo, nullptr, &s_VkInstance));
-#ifdef LUMOS_VOLK
+#ifndef LUMOS_PLATFORM_IOS
             volkLoadInstance(s_VkInstance);
 #endif
             VKUtilities::Init();

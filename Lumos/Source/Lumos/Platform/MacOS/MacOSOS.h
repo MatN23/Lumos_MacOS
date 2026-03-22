@@ -1,5 +1,6 @@
 #pragma once
 #include "Platform/Unix/UnixOS.h"
+#include <string>
 
 namespace Lumos
 {

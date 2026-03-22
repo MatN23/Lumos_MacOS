@@ -25,8 +25,6 @@ namespace Lumos
             QueueablePathNode* value = *it.value;
             delete value;
         }
-        
-        HashMapDeinit(&m_NodeData);
     }
 
     void AStar::Reset()
