@@ -1,0 +1,1639 @@
+{
+    "value0": {
+        "Version": 25,
+        "Scene Name": "FrictionTest",
+        "PhysicsEnabled2D": true,
+        "PhysicsEnabled3D": true,
+        "AudioEnabled": true,
+        "Renderer2DEnabled": true,
+        "Renderer3DEnabled": true,
+        "DebugRenderEnabled": true,
+        "SkyboxRenderEnabled": true,
+        "ShadowsEnabled": true,
+        "Exposure": 1.0,
+        "ToneMap": 4,
+        "BloomIntensity": 1.0,
+        "BloomKnee": 0.10000000149011612,
+        "BloomThreshold": 1.0,
+        "BloomUpsampleScale": 1.0,
+        "FXAAEnabled": false,
+        "DebandingEnabled": false,
+        "ChromaticAberationEnabled": false,
+        "EyeAdaptation": true,
+        "SSAOEnabled": false,
+        "BloomEnabled": false,
+        "FilmicGrainEnabled": false,
+        "DepthOfFieldEnabled": false,
+        "MotionBlurEnabled": false,
+        "DepthOFFieldEnabled": false,
+        "DepthOfFieldStrength": 1.0,
+        "DepthOfFieldDistance": 100.0,
+        "value0": 0.0,
+        "value1": 1.0,
+        "value2": 1.0,
+        "value3": false
+    },
+    "value1": 22,
+    "value2": 22,
+    "value3": 0,
+    "value4": 1,
+    "value5": 2,
+    "value6": 1048579,
+    "value7": 1048580,
+    "value8": 1048581,
+    "value9": 1048582,
+    "value10": 1048583,
+    "value11": 8,
+    "value12": 9,
+    "value13": 10,
+    "value14": 11,
+    "value15": 12,
+    "value16": 13,
+    "value17": 14,
+    "value18": 15,
+    "value19": 16,
+    "value20": 17,
+    "value21": 18,
+    "value22": 19,
+    "value23": 20,
+    "value24": 21,
+    "value25": 20,
+    "value26": 1048583,
+    "value27": {
+        "Position": {
+            "value0": -27.00982093811035,
+            "value1": 31.627342224121095,
+            "value2": -68.29513549804688
+        },
+        "Rotation": {
+            "value0": 0.0,
+            "value1": 0.0,
+            "value2": 0.0,
+            "value3": 1.0
+        },
+        "Scale": {
+            "value0": 1.440000057220459,
+            "value1": 1.440000057220459,
+            "value2": 1.440000057220459
+        }
+    },
+    "value28": 1048582,
+    "value29": {
+        "Position": {
+            "value0": -0.5912942886352539,
+            "value1": 1.4055557250976563,
+            "value2": -0.0007953643798828125
+        },
+        "Rotation": {
+            "value0": 0.0,
+            "value1": 0.0,
+            "value2": 0.0,
+            "value3": 0.9999998807907105
+        },
+        "Scale": {
+            "value0": 0.9999999403953552,
+            "value1": 0.9999999403953552,
+            "value2": 0.9999999403953552
+        }
+    },
+    "value30": 1048581,
+    "value31": {
+        "Position": {
+            "value0": -0.6606948375701904,
+            "value1": 1.3228397369384766,
+            "value2": -0.00013446807861328125
+        },
+        "Rotation": {
+            "value0": 1.1920923270736239e-7,
+            "value1": 1.6763767263228148e-8,
+            "value2": -4.656604879471615e-9,
+            "value3": 0.9999998807907105
+        },
+        "Scale": {
+            "value0": 1.0000020265579224,
+            "value1": 1.0000003576278687,
+            "value2": 0.9999999403953552
+        }
+    },
+    "value32": 1048580,
+    "value33": {
+        "Position": {
+            "value0": -0.43294715881347659,
+            "value1": 1.3228378295898438,
+            "value2": -0.00013637542724609375
+        },
+        "Rotation": {
+            "value0": 1.1920923270736239e-7,
+            "value1": 1.67638418702154e-8,
+            "value2": -4.656626195753688e-9,
+            "value3": 0.9999998807907105
+        },
+        "Scale": {
+            "value0": 0.9999974966049194,
+            "value1": 1.0000003576278687,
+            "value2": 0.9999999403953552
+        }
+    },
+    "value34": 1048579,
+    "value35": {
+        "Position": {
+            "value0": -0.6778364181518555,
+            "value1": 1.3280830383300782,
+            "value2": -0.0012235641479492188
+        },
+        "Rotation": {
+            "value0": 7.496604790928341e-13,
+            "value1": 8.51237984988984e-7,
+            "value2": 1.8766351672638849e-7,
+            "value3": 0.9999999403953552
+        },
+        "Scale": {
+            "value0": 0.9999890923500061,
+            "value1": 0.9999999403953552,
+            "value2": 1.0000035762786866
+        }
+    },
+    "value36": 17,
+    "value37": {
+        "Position": {
+            "value0": -0.6247425079345703,
+            "value1": 1.3768310546875,
+            "value2": -0.000591278076171875
+        },
+        "Rotation": {
+            "value0": 0.0,
+            "value1": 0.0,
+            "value2": 0.0,
+            "value3": 0.9999999403953552
+        },
+        "Scale": {
+            "value0": 0.9999865889549255,
+            "value1": 0.9999998807907105,
+            "value2": 0.9999998807907105
+        }
+    },
+    "value38": 18,
+    "value39": {
+        "Position": {
+            "value0": -0.5990066528320313,
+            "value1": 1.3839454650878907,
+            "value2": -0.0007009506225585938
+        },
+        "Rotation": {
+            "value0": 0.0,
+            "value1": 0.0,
+            "value2": 0.0,
+            "value3": 0.9999999403953552
+        },
+        "Scale": {
+            "value0": 0.9999859929084778,
+            "value1": 0.9999999403953552,
+            "value2": 0.9999999403953552
+        }
+    },
+    "value40": 19,
+    "value41": {
+        "Position": {
+            "value0": -0.20418331027030946,
+            "value1": 4.364779472351074,
+            "value2": -0.4584963023662567
+        },
+        "Rotation": {
+            "value0": -0.002899507060647011,
+            "value1": -3.721827099983921e-12,
+            "value2": 3.0215782653719716e-10,
+            "value3": 0.9999957084655762
+        },
+        "Scale": {
+            "value0": 0.2386147826910019,
+            "value1": 3.229785203933716,
+            "value2": 3.924814462661743
+        }
+    },
+    "value42": 21,
+    "value43": {
+        "Position": {
+            "value0": -0.20418331027030946,
+            "value1": 4.364779472351074,
+            "value2": -0.4584963023662567
+        },
+        "Rotation": {
+            "value0": -0.002899507060647011,
+            "value1": -3.721827099983921e-12,
+            "value2": 3.0215782653719716e-10,
+            "value3": 0.9999957084655762
+        },
+        "Scale": {
+            "value0": 0.2386147826910019,
+            "value1": 3.229785203933716,
+            "value2": 3.924814462661743
+        }
+    },
+    "value44": 0,
+    "value45": {
+        "Position": {
+            "value0": -17.090015411376954,
+            "value1": 15.244362831115723,
+            "value2": -46.14207077026367
+        },
+        "Rotation": {
+            "value0": 0.0,
+            "value1": 0.0,
+            "value2": 0.0,
+            "value3": 0.9999999403953552
+        },
+        "Scale": {
+            "value0": 0.9999998211860657,
+            "value1": 0.9999998211860657,
+            "value2": 0.9999998211860657
+        }
+    },
+    "value46": 1,
+    "value47": {
+        "Position": {
+            "value0": 0.0,
+            "value1": 19.58824348449707,
+            "value2": 31.38949966430664
+        },
+        "Rotation": {
+            "value0": -0.275349885225296,
+            "value1": 0.0,
+            "value2": 0.0,
+            "value3": 0.9613440632820129
+        },
+        "Scale": {
+            "value0": 1.0,
+            "value1": 1.0000001192092896,
+            "value2": 1.0000001192092896
+        }
+    },
+    "value48": 13,
+    "value49": {
+        "Position": {
+            "value0": -1.7922977209091187,
+            "value1": 21.750717163085939,
+            "value2": -74.45775604248047
+        },
+        "Rotation": {
+            "value0": 0.2268378883600235,
+            "value1": 0.10767054557800293,
+            "value2": 0.025190116837620736,
+            "value3": 0.9676347970962524
+        },
+        "Scale": {
+            "value0": 0.9999563694000244,
+            "value1": 0.9999532699584961,
+            "value2": 0.9999532103538513
+        }
+    },
+    "value50": 2,
+    "value51": {
+        "Position": {
+            "value0": 0.0,
+            "value1": -4.934244155883789,
+            "value2": 0.0
+        },
+        "Rotation": {
+            "value0": 0.0,
+            "value1": 0.0,
+            "value2": 0.0,
+            "value3": 0.9999999403953552
+        },
+        "Scale": {
+            "value0": 200.0,
+            "value1": 0.9999999403953552,
+            "value2": 200.0
+        }
+    },
+    "value52": 15,
+    "value53": {
+        "Position": {
+            "value0": -15.154781341552735,
+            "value1": -3.9369235038757326,
+            "value2": -14.436717987060547
+        },
+        "Rotation": {
+            "value0": 0.16927450895309449,
+            "value1": 0.169314906001091,
+            "value2": 0.6865423917770386,
+            "value3": 0.6865407228469849
+        },
+        "Scale": {
+            "value0": 0.9999682903289795,
+            "value1": 0.9999609589576721,
+            "value2": 0.9999609589576721
+        }
+    },
+    "value54": 8,
+    "value55": {
+        "Position": {
+            "value0": -28.30675506591797,
+            "value1": 12.622302055358887,
+            "value2": -58.2805061340332
+        },
+        "Rotation": {
+            "value0": 0.22864913940429688,
+            "value1": 0.0,
+            "value2": 0.0,
+            "value3": 0.973508894443512
+        },
+        "Scale": {
+            "value0": 20.0,
+            "value1": 1.0000001192092896,
+            "value2": 79.9999771118164
+        }
+    },
+    "value56": 9,
+    "value57": {
+        "Position": {
+            "value0": -33.433982849121097,
+            "value1": -3.9371559619903566,
+            "value2": -2.094062328338623
+        },
+        "Rotation": {
+            "value0": -0.6276025772094727,
+            "value1": 0.6274552941322327,
+            "value2": 0.32600629329681399,
+            "value3": -0.32578322291374209
+        },
+        "Scale": {
+            "value0": 0.9999533295631409,
+            "value1": 0.9999533295631409,
+            "value2": 0.9999533295631409
+        }
+    },
+    "value58": 14,
+    "value59": {
+        "Position": {
+            "value0": -6.910731792449951,
+            "value1": 12.622302055358887,
+            "value2": -58.2805061340332
+        },
+        "Rotation": {
+            "value0": 0.2286491096019745,
+            "value1": 0.0,
+            "value2": 0.0,
+            "value3": 0.973508894443512
+        },
+        "Scale": {
+            "value0": 20.0,
+            "value1": 1.0000001192092896,
+            "value2": 79.99996948242188
+        }
+    },
+    "value60": 10,
+    "value61": {
+        "Position": {
+            "value0": -28.272319793701173,
+            "value1": -3.9371142387390138,
+            "value2": 1.0794111490249634
+        },
+        "Rotation": {
+            "value0": -0.7017468214035034,
+            "value1": -0.08589854091405869,
+            "value2": -0.08602333813905716,
+            "value3": 0.7019777297973633
+        },
+        "Scale": {
+            "value0": 0.9999533295631409,
+            "value1": 0.9999533295631409,
+            "value2": 0.9999533295631409
+        }
+    },
+    "value62": 11,
+    "value63": {
+        "Position": {
+            "value0": -26.385263442993165,
+            "value1": -3.936875104904175,
+            "value2": -16.8389949798584
+        },
+        "Rotation": {
+            "value0": -0.7067703604698181,
+            "value1": -0.7067878246307373,
+            "value2": -0.02157033421099186,
+            "value3": -0.02147728018462658
+        },
+        "Scale": {
+            "value0": 0.9999693036079407,
+            "value1": 0.9999693036079407,
+            "value2": 0.9999693036079407
+        }
+    },
+    "value64": 12,
+    "value65": {
+        "Position": {
+            "value0": -7.546762466430664,
+            "value1": 21.408979415893556,
+            "value2": -73.76789093017578
+        },
+        "Rotation": {
+            "value0": 0.22672875225543977,
+            "value1": 0.11386345326900482,
+            "value2": 0.02663852646946907,
+            "value3": 0.9669123888015747
+        },
+        "Scale": {
+            "value0": 0.9999603629112244,
+            "value1": 0.9999614953994751,
+            "value2": 0.999963641166687
+        }
+    },
+    "value66": 13,
+    "value67": 0,
+    "value68": {
+        "Name": "Camera"
+    },
+    "value69": 1,
+    "value70": {
+        "Name": "Light"
+    },
+    "value71": 2,
+    "value72": {
+        "Name": "Ground"
+    },
+    "value73": 12,
+    "value74": {
+        "Name": "Cube"
+    },
+    "value75": 13,
+    "value76": {
+        "Name": "Cube"
+    },
+    "value77": 14,
+    "value78": {
+        "Name": "FrictionSlide"
+    },
+    "value79": 15,
+    "value80": {
+        "Name": "Cube"
+    },
+    "value81": 16,
+    "value82": {
+        "Name": "SlidingCubes"
+    },
+    "value83": 8,
+    "value84": {
+        "Name": "SmoothSlide"
+    },
+    "value85": 9,
+    "value86": {
+        "Name": "Cube"
+    },
+    "value87": 10,
+    "value88": {
+        "Name": "Cube"
+    },
+    "value89": 11,
+    "value90": {
+        "Name": "Cube"
+    },
+    "value91": 1048583,
+    "value92": {
+        "Name": "Text"
+    },
+    "value93": 0,
+    "value94": 17,
+    "value95": 15,
+    "value96": {
+        "First": 1048582,
+        "Next": 13,
+        "Previous": 1048575,
+        "Parent": 16
+    },
+    "value97": 16,
+    "value98": {
+        "First": 15,
+        "Next": 1048575,
+        "Previous": 1048575,
+        "Parent": 1048575
+    },
+    "value99": 13,
+    "value100": {
+        "First": 1048581,
+        "Next": 11,
+        "Previous": 15,
+        "Parent": 16
+    },
+    "value101": 11,
+    "value102": {
+        "First": 1048580,
+        "Next": 12,
+        "Previous": 13,
+        "Parent": 16
+    },
+    "value103": 12,
+    "value104": {
+        "First": 1048579,
+        "Next": 10,
+        "Previous": 11,
+        "Parent": 16
+    },
+    "value105": 10,
+    "value106": {
+        "First": 17,
+        "Next": 9,
+        "Previous": 12,
+        "Parent": 16
+    },
+    "value107": 9,
+    "value108": {
+        "First": 18,
+        "Next": 1048575,
+        "Previous": 10,
+        "Parent": 16
+    },
+    "value109": 1048582,
+    "value110": {
+        "First": 1048575,
+        "Next": 1048575,
+        "Previous": 1048575,
+        "Parent": 15
+    },
+    "value111": 1048581,
+    "value112": {
+        "First": 1048575,
+        "Next": 1048575,
+        "Previous": 1048575,
+        "Parent": 13
+    },
+    "value113": 1048580,
+    "value114": {
+        "First": 1048575,
+        "Next": 1048575,
+        "Previous": 1048575,
+        "Parent": 11
+    },
+    "value115": 1048579,
+    "value116": {
+        "First": 1048575,
+        "Next": 1048575,
+        "Previous": 1048575,
+        "Parent": 12
+    },
+    "value117": 17,
+    "value118": {
+        "First": 1048575,
+        "Next": 1048575,
+        "Previous": 1048575,
+        "Parent": 10
+    },
+    "value119": 18,
+    "value120": {
+        "First": 1048575,
+        "Next": 1048575,
+        "Previous": 1048575,
+        "Parent": 9
+    },
+    "value121": 19,
+    "value122": {
+        "First": 1048575,
+        "Next": 1048575,
+        "Previous": 1048575,
+        "Parent": 14
+    },
+    "value123": 14,
+    "value124": {
+        "First": 19,
+        "Next": 1048575,
+        "Previous": 1048575,
+        "Parent": 1048575
+    },
+    "value125": 21,
+    "value126": {
+        "First": 1048575,
+        "Next": 1048575,
+        "Previous": 1048575,
+        "Parent": 8
+    },
+    "value127": 8,
+    "value128": {
+        "First": 21,
+        "Next": 1048575,
+        "Previous": 1048575,
+        "Parent": 1048575
+    },
+    "value129": 1,
+    "value130": 0,
+    "value131": {
+        "Scale": 1.0,
+        "Aspect": 0.7917808294296265,
+        "FOV": 90.0,
+        "Near": 0.009999999776482582,
+        "Far": 1000.0,
+        "Aperture": 50.0,
+        "ShutterSpeed": 0.01666666753590107,
+        "Sensitivity": 200.0
+    },
+    "value132": 1,
+    "value133": 0,
+    "value134": {
+        "FilePath": "//Assets/Scripts/Projectile.lua"
+    },
+    "value135": 0,
+    "value136": 1,
+    "value137": 1,
+    "value138": {
+        "value0": {
+            "value0": 0.0,
+            "value1": 19.58824348449707,
+            "value2": 31.38949966430664,
+            "value3": 1.0
+        },
+        "value1": {
+            "value0": 1.0,
+            "value1": 1.0,
+            "value2": 1.0,
+            "value3": 1.0
+        },
+        "value2": 0.0,
+        "value3": 0.0,
+        "value4": {
+            "value0": 0.0,
+            "value1": 0.5294119715690613,
+            "value2": 0.8483648896217346,
+            "value3": 1.0
+        },
+        "value5": 120000.0,
+        "value6": 1.0
+    },
+    "value139": 9,
+    "value140": 8,
+    "value141": {
+        "value0": {
+            "Version": 2,
+            "Position": {
+                "value0": -28.30675506591797,
+                "value1": 12.622302055358887,
+                "value2": -58.2805061340332
+            },
+            "Orientation": {
+                "value0": 0.22797752916812898,
+                "value1": 0.0,
+                "value2": 0.0,
+                "value3": 0.9736663699150086
+            },
+            "LinearVelocity": {
+                "value0": 0.0,
+                "value1": 0.0,
+                "value2": 0.0
+            },
+            "Force": {
+                "value0": 0.0,
+                "value1": 0.0,
+                "value2": 0.0
+            },
+            "Mass": 1.0,
+            "AngularVelocity": {
+                "value0": 0.0,
+                "value1": 0.0,
+                "value2": 0.0
+            },
+            "Torque": {
+                "value0": 0.0,
+                "value1": 0.0,
+                "value2": 0.0
+            },
+            "Static": true,
+            "Friction": 0.0,
+            "Elasticity": 1.0,
+            "CollisionShape": {
+                "polymorphic_id": 2147483649,
+                "polymorphic_name": "Lumos::CuboidCollisionShape",
+                "ptr_wrapper": {
+                    "valid": 1,
+                    "data": {
+                        "value0": {
+                            "value0": 10.0,
+                            "value1": 0.5,
+                            "value2": 40.0
+                        }
+                    }
+                }
+            },
+            "Trigger": false,
+            "AngularFactor": 1.0,
+            "UUID": 8712406732811877819
+        }
+    },
+    "value142": 10,
+    "value143": {
+        "value0": {
+            "Version": 2,
+            "Position": {
+                "value0": -28.272323608398439,
+                "value1": -3.9370510578155519,
+                "value2": 1.079403042793274
+            },
+            "Orientation": {
+                "value0": -0.7017648220062256,
+                "value1": -0.08590863645076752,
+                "value2": -0.0860135555267334,
+                "value3": 0.7019597887992859
+            },
+            "LinearVelocity": {
+                "value0": -0.0005488517344929278,
+                "value1": -0.01087162084877491,
+                "value2": -0.003156333463266492
+            },
+            "Force": {
+                "value0": 0.0,
+                "value1": 0.0,
+                "value2": 0.0
+            },
+            "Mass": 1.0,
+            "AngularVelocity": {
+                "value0": -0.009122185409069062,
+                "value1": -0.0000042153710637649059,
+                "value2": 0.0021332306787371637
+            },
+            "Torque": {
+                "value0": 0.0,
+                "value1": 0.0,
+                "value2": 0.0
+            },
+            "Static": false,
+            "Friction": 0.5,
+            "Elasticity": 1.0,
+            "CollisionShape": {
+                "polymorphic_id": 1,
+                "ptr_wrapper": {
+                    "valid": 1,
+                    "data": {
+                        "value0": {
+                            "value0": 0.5,
+                            "value1": 0.5,
+                            "value2": 0.5
+                        }
+                    }
+                }
+            },
+            "Trigger": false,
+            "AngularFactor": 1.0,
+            "UUID": 16934415713990072467
+        }
+    },
+    "value144": 11,
+    "value145": {
+        "value0": {
+            "Version": 2,
+            "Position": {
+                "value0": -26.385271072387697,
+                "value1": -3.936875820159912,
+                "value2": -16.8389949798584
+            },
+            "Orientation": {
+                "value0": -0.7067704796791077,
+                "value1": -0.7067875862121582,
+                "value2": -0.021572038531303407,
+                "value3": -0.021478896960616113
+            },
+            "LinearVelocity": {
+                "value0": -0.0007732394151389599,
+                "value1": -0.020513541996479036,
+                "value2": 0.00021324053523130715
+            },
+            "Force": {
+                "value0": 0.0,
+                "value1": 0.0,
+                "value2": 0.0
+            },
+            "Mass": 1.0,
+            "AngularVelocity": {
+                "value0": 0.000017024709450197407,
+                "value1": -0.000563966401387006,
+                "value2": -0.00007549457950517535
+            },
+            "Torque": {
+                "value0": 0.0,
+                "value1": 0.0,
+                "value2": 0.0
+            },
+            "Static": false,
+            "Friction": 1.0,
+            "Elasticity": 1.0,
+            "CollisionShape": {
+                "polymorphic_id": 1,
+                "ptr_wrapper": {
+                    "valid": 1,
+                    "data": {
+                        "value0": {
+                            "value0": 0.5,
+                            "value1": 0.5,
+                            "value2": 0.5
+                        }
+                    }
+                }
+            },
+            "Trigger": false,
+            "AngularFactor": 1.0,
+            "UUID": 3484666708183098700
+        }
+    },
+    "value146": 13,
+    "value147": {
+        "value0": {
+            "Version": 2,
+            "Position": {
+                "value0": -1.792315125465393,
+                "value1": 21.750600814819337,
+                "value2": -74.45752716064453
+            },
+            "Orientation": {
+                "value0": 0.22683782875537873,
+                "value1": 0.10767395794391632,
+                "value2": 0.02519075758755207,
+                "value3": 0.9676344394683838
+            },
+            "LinearVelocity": {
+                "value0": -0.0020966636948287489,
+                "value1": -0.03437136113643646,
+                "value2": 0.026924684643745424
+            },
+            "Force": {
+                "value0": 0.0,
+                "value1": 0.0,
+                "value2": 0.0
+            },
+            "Mass": 1.0,
+            "AngularVelocity": {
+                "value0": 0.0000050362091315037109,
+                "value1": 0.0007657561218366027,
+                "value2": 0.00033769788569770753
+            },
+            "Torque": {
+                "value0": 0.0,
+                "value1": 0.0,
+                "value2": 0.0
+            },
+            "Static": false,
+            "Friction": 1.0,
+            "Elasticity": 1.0,
+            "CollisionShape": {
+                "polymorphic_id": 1,
+                "ptr_wrapper": {
+                    "valid": 1,
+                    "data": {
+                        "value0": {
+                            "value0": 0.5,
+                            "value1": 0.5,
+                            "value2": 0.5
+                        }
+                    }
+                }
+            },
+            "Trigger": false,
+            "AngularFactor": 1.0,
+            "UUID": 12217950934268495256
+        }
+    },
+    "value148": 14,
+    "value149": {
+        "value0": {
+            "Version": 2,
+            "Position": {
+                "value0": -6.910731792449951,
+                "value1": 12.622302055358887,
+                "value2": -58.2805061340332
+            },
+            "Orientation": {
+                "value0": 0.22797752916812898,
+                "value1": 0.0,
+                "value2": 0.0,
+                "value3": 0.9736663699150086
+            },
+            "LinearVelocity": {
+                "value0": 0.0,
+                "value1": 0.0,
+                "value2": 0.0
+            },
+            "Force": {
+                "value0": 0.0,
+                "value1": 0.0,
+                "value2": 0.0
+            },
+            "Mass": 1.0,
+            "AngularVelocity": {
+                "value0": 0.0,
+                "value1": 0.0,
+                "value2": 0.0
+            },
+            "Torque": {
+                "value0": 0.0,
+                "value1": 0.0,
+                "value2": 0.0
+            },
+            "Static": true,
+            "Friction": 1.0,
+            "Elasticity": 1.0,
+            "CollisionShape": {
+                "polymorphic_id": 1,
+                "ptr_wrapper": {
+                    "valid": 1,
+                    "data": {
+                        "value0": {
+                            "value0": 10.0,
+                            "value1": 0.5,
+                            "value2": 40.0
+                        }
+                    }
+                }
+            },
+            "Trigger": false,
+            "AngularFactor": 1.0,
+            "UUID": 80372845723510576
+        }
+    },
+    "value150": 15,
+    "value151": {
+        "value0": {
+            "Version": 2,
+            "Position": {
+                "value0": -15.154783248901368,
+                "value1": -3.9369235038757326,
+                "value2": -14.436729431152344
+            },
+            "Orientation": {
+                "value0": 0.16927194595336915,
+                "value1": 0.1693124920129776,
+                "value2": 0.6865428686141968,
+                "value3": 0.6865414381027222
+            },
+            "LinearVelocity": {
+                "value0": -0.000178998670889996,
+                "value1": -0.020442642271518709,
+                "value2": -0.0014738579047843814
+            },
+            "Force": {
+                "value0": 0.0,
+                "value1": 0.0,
+                "value2": 0.0
+            },
+            "Mass": 1.0,
+            "AngularVelocity": {
+                "value0": -0.00003174362063873559,
+                "value1": -0.0008695650612935424,
+                "value2": -0.000034011245588772
+            },
+            "Torque": {
+                "value0": 0.0,
+                "value1": 0.0,
+                "value2": 0.0
+            },
+            "Static": false,
+            "Friction": 0.0,
+            "Elasticity": 1.0,
+            "CollisionShape": {
+                "polymorphic_id": 1,
+                "ptr_wrapper": {
+                    "valid": 1,
+                    "data": {
+                        "value0": {
+                            "value0": 0.5,
+                            "value1": 0.5,
+                            "value2": 0.5
+                        }
+                    }
+                }
+            },
+            "Trigger": false,
+            "AngularFactor": 1.0,
+            "UUID": 6860663842054857823
+        }
+    },
+    "value152": 2,
+    "value153": {
+        "value0": {
+            "Version": 2,
+            "Position": {
+                "value0": 0.0,
+                "value1": -4.934244155883789,
+                "value2": 0.0
+            },
+            "Orientation": {
+                "value0": 0.0,
+                "value1": 0.0,
+                "value2": 0.0,
+                "value3": 1.0
+            },
+            "LinearVelocity": {
+                "value0": 0.0,
+                "value1": 0.0,
+                "value2": 0.0
+            },
+            "Force": {
+                "value0": 0.0,
+                "value1": 0.0,
+                "value2": 0.0
+            },
+            "Mass": 1.0,
+            "AngularVelocity": {
+                "value0": 0.0,
+                "value1": 0.0,
+                "value2": 0.0
+            },
+            "Torque": {
+                "value0": 0.0,
+                "value1": 0.0,
+                "value2": 0.0
+            },
+            "Static": true,
+            "Friction": 0.75,
+            "Elasticity": 1.0,
+            "CollisionShape": {
+                "polymorphic_id": 1,
+                "ptr_wrapper": {
+                    "valid": 1,
+                    "data": {
+                        "value0": {
+                            "value0": 100.0,
+                            "value1": 0.5,
+                            "value2": 100.0
+                        }
+                    }
+                }
+            },
+            "Trigger": false,
+            "AngularFactor": 1.0,
+            "UUID": 10616399252277869284
+        }
+    },
+    "value154": 12,
+    "value155": {
+        "value0": {
+            "Version": 2,
+            "Position": {
+                "value0": -7.546792984008789,
+                "value1": 21.408737182617189,
+                "value2": -73.76740264892578
+            },
+            "Orientation": {
+                "value0": 0.22672875225543977,
+                "value1": 0.11386166512966156,
+                "value2": 0.026638329029083253,
+                "value3": 0.9669126272201538
+            },
+            "LinearVelocity": {
+                "value0": -0.0018500260775908828,
+                "value1": -0.03506665676832199,
+                "value2": 0.02909301221370697
+            },
+            "Force": {
+                "value0": 0.0,
+                "value1": 0.0,
+                "value2": 0.0
+            },
+            "Mass": 1.0,
+            "AngularVelocity": {
+                "value0": 0.0000019373073882889004,
+                "value1": -0.00021952306269668043,
+                "value2": -0.00004628185706678778
+            },
+            "Torque": {
+                "value0": 0.0,
+                "value1": 0.0,
+                "value2": 0.0
+            },
+            "Static": false,
+            "Friction": 0.5,
+            "Elasticity": 1.0,
+            "CollisionShape": {
+                "polymorphic_id": 1,
+                "ptr_wrapper": {
+                    "valid": 1,
+                    "data": {
+                        "value0": {
+                            "value0": 0.5,
+                            "value1": 0.5,
+                            "value2": 0.5
+                        }
+                    }
+                }
+            },
+            "Trigger": false,
+            "AngularFactor": 1.0,
+            "UUID": 6600083380119639604
+        }
+    },
+    "value156": 9,
+    "value157": {
+        "value0": {
+            "Version": 2,
+            "Position": {
+                "value0": -33.43400573730469,
+                "value1": -3.937182903289795,
+                "value2": -2.0940051078796388
+            },
+            "Orientation": {
+                "value0": -0.6276108622550964,
+                "value1": 0.6274392604827881,
+                "value2": 0.3260243833065033,
+                "value3": -0.32578009366989138
+            },
+            "LinearVelocity": {
+                "value0": -0.0007858208264224231,
+                "value1": -0.021520888432860376,
+                "value2": 0.002292456803843379
+            },
+            "Force": {
+                "value0": 0.0,
+                "value1": 0.0,
+                "value2": 0.0
+            },
+            "Mass": 1.0,
+            "AngularVelocity": {
+                "value0": 0.0016998545033857227,
+                "value1": 0.0009499177685938776,
+                "value2": 0.0006610050331801176
+            },
+            "Torque": {
+                "value0": 0.0,
+                "value1": 0.0,
+                "value2": 0.0
+            },
+            "Static": false,
+            "Friction": 0.0,
+            "Elasticity": 1.0,
+            "CollisionShape": {
+                "polymorphic_id": 1,
+                "ptr_wrapper": {
+                    "valid": 1,
+                    "data": {
+                        "value0": {
+                            "value0": 0.5,
+                            "value1": 0.5,
+                            "value2": 0.5
+                        }
+                    }
+                }
+            },
+            "Trigger": false,
+            "AngularFactor": 1.0,
+            "UUID": 11240915561327513344
+        }
+    },
+    "value158": 0,
+    "value159": 0,
+    "value160": 0,
+    "value161": 1,
+    "value162": 0,
+    "value163": {
+        "ControllerType": 4
+    },
+    "value164": 0,
+    "value165": 0,
+    "value166": 0,
+    "value167": 22,
+    "value168": 0,
+    "value169": {
+        "value0": 17333584295669753552
+    },
+    "value170": 1,
+    "value171": {
+        "value0": 2056444811759653555
+    },
+    "value172": 2,
+    "value173": {
+        "value0": 8219923014548643572
+    },
+    "value174": 12,
+    "value175": {
+        "value0": 878591696741460215
+    },
+    "value176": 13,
+    "value177": {
+        "value0": 3628272929864672826
+    },
+    "value178": 14,
+    "value179": {
+        "value0": 6482561120761483871
+    },
+    "value180": 15,
+    "value181": {
+        "value0": 7196907352404211367
+    },
+    "value182": 16,
+    "value183": {
+        "value0": 13218978856082908699
+    },
+    "value184": 8,
+    "value185": {
+        "value0": 6785077762993771612
+    },
+    "value186": 9,
+    "value187": {
+        "value0": 13778243813661645835
+    },
+    "value188": 10,
+    "value189": {
+        "value0": 7326927454077248880
+    },
+    "value190": 11,
+    "value191": {
+        "value0": 12726994322051504962
+    },
+    "value192": 1048583,
+    "value193": {
+        "value0": 7183123740879404828
+    },
+    "value194": 1048582,
+    "value195": {
+        "value0": 660219039544373758
+    },
+    "value196": 1048581,
+    "value197": {
+        "value0": 6226877766830344776
+    },
+    "value198": 1048580,
+    "value199": {
+        "value0": 18211397235167252650
+    },
+    "value200": 1048579,
+    "value201": {
+        "value0": 1369065653363819766
+    },
+    "value202": 17,
+    "value203": {
+        "value0": 12653709222330755596
+    },
+    "value204": 18,
+    "value205": {
+        "value0": 2326427441459522043
+    },
+    "value206": 19,
+    "value207": {
+        "value0": 2355997577762587085
+    },
+    "value208": 21,
+    "value209": {
+        "value0": 6822549723392652559
+    },
+    "value210": 20,
+    "value211": {
+        "value0": 12357481508822289714
+    },
+    "value212": 9,
+    "value213": 2,
+    "value214": {
+        "PrimitiveType": 2,
+        "FilePath": "Primitive",
+        "Material": {
+            "ptr_wrapper": {
+                "valid": 1,
+                "data": {
+                    "Albedo": "//Assets/Textures/checkerboard.tga",
+                    "Normal": "",
+                    "Metallic": "",
+                    "Roughness": "",
+                    "Ao": "",
+                    "Emissive": "",
+                    "albedoColour": {
+                        "value0": 0.0,
+                        "value1": 0.02305459976196289,
+                        "value2": 1.0,
+                        "value3": 1.0
+                    },
+                    "roughnessValue": 1.0,
+                    "metallicValue": 1.0,
+                    "emissiveValue": 0.0,
+                    "albedoMapFactor": 0.5,
+                    "metallicMapFactor": 0.0,
+                    "roughnessMapFactor": 0.0,
+                    "normalMapFactor": 0.0,
+                    "aoMapFactor": 0.0,
+                    "emissiveMapFactor": 0.0,
+                    "alphaCutOff": 0.4000000059604645,
+                    "workflow": 0.0,
+                    "shader": "C:/Dev/Lumos-Dev/bin/Debug-windows-x86_64/../../Lumos/Assets/Shaders/ForwardPBR.shader",
+                    "Reflectance": 0.30000001192092898
+                }
+            }
+        }
+    },
+    "value215": 8,
+    "value216": {
+        "PrimitiveType": 2,
+        "FilePath": "Primitive",
+        "Material": {
+            "ptr_wrapper": {
+                "valid": 1,
+                "data": {
+                    "Albedo": "",
+                    "Normal": "",
+                    "Metallic": "",
+                    "Roughness": "",
+                    "Ao": "",
+                    "Emissive": "",
+                    "albedoColour": {
+                        "value0": 0.46109485626220705,
+                        "value1": 0.0,
+                        "value2": 1.0,
+                        "value3": 1.0
+                    },
+                    "roughnessValue": 0.699999988079071,
+                    "metallicValue": 0.699999988079071,
+                    "emissiveValue": 0.0,
+                    "albedoMapFactor": 0.0,
+                    "metallicMapFactor": 0.0,
+                    "roughnessMapFactor": 0.0,
+                    "normalMapFactor": 0.0,
+                    "aoMapFactor": 0.0,
+                    "emissiveMapFactor": 0.0,
+                    "alphaCutOff": 0.4000000059604645,
+                    "workflow": 0.0,
+                    "shader": "C:/Dev/Lumos-Dev/bin/Debug-windows-x86_64/../../Lumos/Assets/Shaders/ForwardPBR.shader",
+                    "Reflectance": 0.30000001192092898
+                }
+            }
+        }
+    },
+    "value217": 9,
+    "value218": {
+        "PrimitiveType": 2,
+        "FilePath": "Primitive",
+        "Material": {
+            "ptr_wrapper": {
+                "valid": 0
+            }
+        }
+    },
+    "value219": 10,
+    "value220": {
+        "PrimitiveType": 2,
+        "FilePath": "Primitive",
+        "Material": {
+            "ptr_wrapper": {
+                "valid": 0
+            }
+        }
+    },
+    "value221": 11,
+    "value222": {
+        "PrimitiveType": 2,
+        "FilePath": "Primitive",
+        "Material": {
+            "ptr_wrapper": {
+                "valid": 0
+            }
+        }
+    },
+    "value223": 12,
+    "value224": {
+        "PrimitiveType": 2,
+        "FilePath": "Primitive",
+        "Material": {
+            "ptr_wrapper": {
+                "valid": 0
+            }
+        }
+    },
+    "value225": 13,
+    "value226": {
+        "PrimitiveType": 2,
+        "FilePath": "Primitive",
+        "Material": {
+            "ptr_wrapper": {
+                "valid": 0
+            }
+        }
+    },
+    "value227": 14,
+    "value228": {
+        "PrimitiveType": 2,
+        "FilePath": "Primitive",
+        "Material": {
+            "ptr_wrapper": {
+                "valid": 1,
+                "data": {
+                    "Albedo": "",
+                    "Normal": "",
+                    "Metallic": "",
+                    "Roughness": "",
+                    "Ao": "",
+                    "Emissive": "",
+                    "albedoColour": {
+                        "value0": 0.0,
+                        "value1": 0.02305459976196289,
+                        "value2": 1.0,
+                        "value3": 1.0
+                    },
+                    "roughnessValue": 0.699999988079071,
+                    "metallicValue": 0.699999988079071,
+                    "emissiveValue": 0.0,
+                    "albedoMapFactor": 0.0,
+                    "metallicMapFactor": 0.0,
+                    "roughnessMapFactor": 0.0,
+                    "normalMapFactor": 0.0,
+                    "aoMapFactor": 0.0,
+                    "emissiveMapFactor": 0.0,
+                    "alphaCutOff": 0.4000000059604645,
+                    "workflow": 0.0,
+                    "shader": "C:/Dev/Lumos-Dev/bin/Debug-windows-x86_64/../../Lumos/Assets/Shaders/ForwardPBR.shader",
+                    "Reflectance": 0.30000001192092898
+                }
+            }
+        }
+    },
+    "value229": 15,
+    "value230": {
+        "PrimitiveType": 2,
+        "FilePath": "Primitive",
+        "Material": {
+            "ptr_wrapper": {
+                "valid": 0
+            }
+        }
+    },
+    "value231": 0,
+    "value232": 9,
+    "value233": 1048583,
+    "value234": {
+        "TextString": "Test for different objects sliding down a ramp with different friction values",
+        "Path": "RobotoRegular",
+        "Colour": {
+            "value0": 1.0,
+            "value1": 1.0,
+            "value2": 1.0,
+            "value3": 1.0
+        },
+        "LineSpacing": 0.0,
+        "Kerning": 0.0,
+        "MaxWidth": 15.0,
+        "OutlineColour": {
+            "value0": 1.0,
+            "value1": 1.0,
+            "value2": 1.0,
+            "value3": 1.0
+        },
+        "OutlineWidth": 0.0
+    },
+    "value235": 1048582,
+    "value236": {
+        "TextString": "0.0",
+        "Path": "RobotoRegular",
+        "Colour": {
+            "value0": 1.0,
+            "value1": 1.0,
+            "value2": 1.0,
+            "value3": 1.0
+        },
+        "LineSpacing": 0.0,
+        "Kerning": 0.0,
+        "MaxWidth": 10.0,
+        "OutlineColour": {
+            "value0": 1.0,
+            "value1": 1.0,
+            "value2": 1.0,
+            "value3": 1.0
+        },
+        "OutlineWidth": 0.0
+    },
+    "value237": 1048581,
+    "value238": {
+        "TextString": "1.0",
+        "Path": "RobotoRegular",
+        "Colour": {
+            "value0": 1.0,
+            "value1": 1.0,
+            "value2": 1.0,
+            "value3": 1.0
+        },
+        "LineSpacing": 0.0,
+        "Kerning": 0.0,
+        "MaxWidth": 10.0,
+        "OutlineColour": {
+            "value0": 1.0,
+            "value1": 1.0,
+            "value2": 1.0,
+            "value3": 1.0
+        },
+        "OutlineWidth": 0.0
+    },
+    "value239": 1048580,
+    "value240": {
+        "TextString": "1.0",
+        "Path": "RobotoRegular",
+        "Colour": {
+            "value0": 1.0,
+            "value1": 1.0,
+            "value2": 1.0,
+            "value3": 1.0
+        },
+        "LineSpacing": 0.0,
+        "Kerning": 0.0,
+        "MaxWidth": 10.0,
+        "OutlineColour": {
+            "value0": 1.0,
+            "value1": 1.0,
+            "value2": 1.0,
+            "value3": 1.0
+        },
+        "OutlineWidth": 0.0
+    },
+    "value241": 1048579,
+    "value242": {
+        "TextString": "0.5\n",
+        "Path": "RobotoRegular",
+        "Colour": {
+            "value0": 1.0,
+            "value1": 1.0,
+            "value2": 1.0,
+            "value3": 1.0
+        },
+        "LineSpacing": 0.0,
+        "Kerning": 0.0,
+        "MaxWidth": 10.0,
+        "OutlineColour": {
+            "value0": 1.0,
+            "value1": 1.0,
+            "value2": 1.0,
+            "value3": 1.0
+        },
+        "OutlineWidth": 0.0
+    },
+    "value243": 17,
+    "value244": {
+        "TextString": "0.5",
+        "Path": "RobotoRegular",
+        "Colour": {
+            "value0": 1.0,
+            "value1": 1.0,
+            "value2": 1.0,
+            "value3": 1.0
+        },
+        "LineSpacing": 0.0,
+        "Kerning": 0.0,
+        "MaxWidth": 10.0,
+        "OutlineColour": {
+            "value0": 1.0,
+            "value1": 1.0,
+            "value2": 1.0,
+            "value3": 1.0
+        },
+        "OutlineWidth": 0.0
+    },
+    "value245": 18,
+    "value246": {
+        "TextString": "0.0\n",
+        "Path": "RobotoRegular",
+        "Colour": {
+            "value0": 1.0,
+            "value1": 1.0,
+            "value2": 1.0,
+            "value3": 1.0
+        },
+        "LineSpacing": 0.0,
+        "Kerning": 0.0,
+        "MaxWidth": 10.0,
+        "OutlineColour": {
+            "value0": 1.0,
+            "value1": 1.0,
+            "value2": 1.0,
+            "value3": 1.0
+        },
+        "OutlineWidth": 0.0
+    },
+    "value247": 19,
+    "value248": {
+        "TextString": "1.0",
+        "Path": "RobotoRegular",
+        "Colour": {
+            "value0": 1.0,
+            "value1": 1.0,
+            "value2": 1.0,
+            "value3": 1.0
+        },
+        "LineSpacing": 0.0,
+        "Kerning": 0.0,
+        "MaxWidth": 10.0,
+        "OutlineColour": {
+            "value0": 1.0,
+            "value1": 1.0,
+            "value2": 1.0,
+            "value3": 1.0
+        },
+        "OutlineWidth": 0.0
+    },
+    "value249": 21,
+    "value250": {
+        "TextString": "0.0",
+        "Path": "RobotoRegular",
+        "Colour": {
+            "value0": 1.0,
+            "value1": 1.0,
+            "value2": 1.0,
+            "value3": 1.0
+        },
+        "LineSpacing": 0.0,
+        "Kerning": 0.0,
+        "MaxWidth": 10.0,
+        "OutlineColour": {
+            "value0": 1.0,
+            "value1": 1.0,
+            "value2": 1.0,
+            "value3": 1.0
+        },
+        "OutlineWidth": 0.0
+    },
+    "value251": 0,
+    "value252": 0
+}

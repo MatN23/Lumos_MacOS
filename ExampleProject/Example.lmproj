@@ -1,0 +1,30 @@
+{
+    "value0": {
+        "Project Version": 8,
+        "RenderAPI": 1,
+        "Fullscreen": true,
+        "VSync": true,
+        "ShowConsole": false,
+        "Title": "Example",
+        "Scenes": [
+            "//Assets/Scenes/2D",
+            "//Assets/Scenes/Physics",
+            "//Assets/Scenes/Terrain",
+            "//Assets/Scenes/2DTest",
+            "//Assets/Scenes/ElasticTest",
+            "//Assets/Scenes/FrictionTest",
+            "//Assets/Scenes/Sandbox",
+            "//Assets/Scenes/Sponza",
+            "//Assets/Scenes/Platformer",
+            "//Assets/Scenes/CapsuleTest",
+            "//Assets/Scenes/MeshCollisionTest",
+            "//Assets/Scenes/CollisionPyramidTest",
+            "//Assets/Scenes/Pong",
+            "//Assets/Scenes/SceneModelViewer"
+        ],
+        "SceneIndex": 0,
+        "Borderless": false,
+        "EngineAssetPath": "",
+        "GPUIndex": -1
+    }
+}

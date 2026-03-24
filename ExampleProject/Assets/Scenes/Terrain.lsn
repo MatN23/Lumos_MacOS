@@ -1,0 +1,268 @@
+{
+    "value0": {
+        "Version": 27,
+        "Scene Name": "Terrain",
+        "PhysicsEnabled2D": true,
+        "PhysicsEnabled3D": true,
+        "AudioEnabled": true,
+        "Renderer2DEnabled": true,
+        "Renderer3DEnabled": true,
+        "DebugRenderEnabled": true,
+        "SkyboxRenderEnabled": true,
+        "ShadowsEnabled": true,
+        "Exposure": 1.0,
+        "ToneMap": 4,
+        "BloomIntensity": 1.0,
+        "BloomKnee": 0.10000000149011612,
+        "BloomThreshold": 1.0,
+        "BloomUpsampleScale": 1.0,
+        "FXAAEnabled": true,
+        "DebandingEnabled": true,
+        "ChromaticAberationEnabled": false,
+        "EyeAdaptation": true,
+        "SSAOEnabled": true,
+        "BloomEnabled": true,
+        "FilmicGrainEnabled": false,
+        "DepthOfFieldEnabled": false,
+        "MotionBlurEnabled": false,
+        "DepthOFFieldEnabled": false,
+        "DepthOfFieldStrength": 1.0,
+        "DepthOfFieldDistance": 100.0,
+        "value0": 0.0,
+        "value1": 1.0,
+        "value2": 1.0,
+        "value3": false
+    },
+    "value1": 3,
+    "value2": 3,
+    "value3": 0,
+    "value4": 1,
+    "value5": 2,
+    "value6": 3,
+    "value7": 2,
+    "value8": {
+        "Position": {
+            "value0": 77.37893676757813,
+            "value1": 93.6859130859375,
+            "value2": 373.97174072265627
+        },
+        "Rotation": {
+            "value0": 0.0,
+            "value1": 0.0,
+            "value2": 0.0,
+            "value3": 1.0
+        },
+        "Scale": {
+            "value0": 1.0,
+            "value1": 1.0,
+            "value2": 1.0
+        }
+    },
+    "value9": 0,
+    "value10": {
+        "Position": {
+            "value0": 0.0,
+            "value1": 0.0,
+            "value2": 0.0
+        },
+        "Rotation": {
+            "value0": -0.2690467834472656,
+            "value1": 0.0,
+            "value2": 0.0,
+            "value3": 0.9631271362304688
+        },
+        "Scale": {
+            "value0": 1.0,
+            "value1": 1.0,
+            "value2": 1.0
+        }
+    },
+    "value11": 1,
+    "value12": {
+        "Position": {
+            "value0": 0.0,
+            "value1": 0.0,
+            "value2": 0.0
+        },
+        "Rotation": {
+            "value0": 0.0,
+            "value1": 0.0,
+            "value2": 0.0,
+            "value3": 1.0
+        },
+        "Scale": {
+            "value0": 1.0,
+            "value1": 1.0,
+            "value2": 1.0
+        }
+    },
+    "value13": 2,
+    "value14": 0,
+    "value15": {
+        "Name": "Light"
+    },
+    "value16": 2,
+    "value17": {
+        "Name": "Player"
+    },
+    "value18": 0,
+    "value19": 0,
+    "value20": 1,
+    "value21": 2,
+    "value22": {
+        "Scale": 1.0,
+        "Aspect": 1.0,
+        "FOV": 60.0,
+        "Near": 0.10000000149011612,
+        "Far": 100.0,
+        "Aperture": 55.0,
+        "ShutterSpeed": 0.01666666753590107,
+        "Sensitivity": 250.0
+    },
+    "value23": 1,
+    "value24": 2,
+    "value25": {
+        "FilePath": "//Assets/Scripts/Projectile.lua"
+    },
+    "value26": 0,
+    "value27": 1,
+    "value28": 0,
+    "value29": {
+        "value0": {
+            "value0": 0.0,
+            "value1": 0.0,
+            "value2": 0.0,
+            "value3": 1.0
+        },
+        "value1": {
+            "value0": 1.0,
+            "value1": 1.0,
+            "value2": 1.0,
+            "value3": 1.0
+        },
+        "value2": 0.0,
+        "value3": 0.0,
+        "value4": {
+            "value0": 0.0,
+            "value1": 0.5182524919509888,
+            "value2": 0.8552276492118836,
+            "value3": 1.0
+        },
+        "value5": 120000.0,
+        "value6": 1.0
+    },
+    "value30": 1,
+    "value31": 1,
+    "value32": {
+        "value0": {
+            "Version": 4,
+            "Position": {
+                "value0": 0.0,
+                "value1": 0.0,
+                "value2": 0.0
+            },
+            "Orientation": {
+                "value0": 0.0,
+                "value1": 0.0,
+                "value2": 0.0,
+                "value3": 1.0
+            },
+            "LinearVelocity": {
+                "value0": 0.0,
+                "value1": 0.0,
+                "value2": 0.0
+            },
+            "Force": {
+                "value0": 0.0,
+                "value1": 0.0,
+                "value2": 0.0
+            },
+            "Mass": 1.0,
+            "AngularVelocity": {
+                "value0": 0.0,
+                "value1": 0.0,
+                "value2": 0.0
+            },
+            "Torque": {
+                "value0": 0.0,
+                "value1": 0.0,
+                "value2": 0.0
+            },
+            "Static": true,
+            "Friction": 0.5,
+            "Elasticity": 0.5,
+            "CollisionShape": {
+                "polymorphic_id": 2147483649,
+                "polymorphic_name": "Lumos::TerrainCollisionShape",
+                "ptr_wrapper": {
+                    "valid": 1,
+                    "data": {
+                        "value0": 500,
+                        "value1": 500,
+                        "value2": 1.0,
+                        "value3": 150.0
+                    }
+                }
+            },
+            "Trigger": false,
+            "AngularFactor": {
+                "value0": 1.0,
+                "value1": 1.0,
+                "value2": 1.0
+            },
+            "UUID": 187299675544467831,
+            "CollisionLayer": 0,
+            "CollisionMask": 65535,
+            "LinearFactor": {
+                "value0": 1.0,
+                "value1": 1.0,
+                "value2": 1.0
+            },
+            "Material": {
+                "value0": 0.5,
+                "value1": 0.5,
+                "value2": 0,
+                "value3": 0
+            }
+        }
+    },
+    "value33": 0,
+    "value34": 0,
+    "value35": 0,
+    "value36": 1,
+    "value37": 2,
+    "value38": {
+        "ControllerType": 4
+    },
+    "value39": 0,
+    "value40": 0,
+    "value41": 0,
+    "value42": 3,
+    "value43": 0,
+    "value44": {
+        "value0": 12059553903246432487
+    },
+    "value45": 1,
+    "value46": {
+        "value0": 16931105137728267615
+    },
+    "value47": 2,
+    "value48": {
+        "value0": 16943460828143182506
+    },
+    "value49": 1,
+    "value50": 1,
+    "value51": {
+        "PrimitiveType": 7,
+        "FilePath": "Primitive",
+        "Material": {
+            "ptr_wrapper": {
+                "valid": 0
+            }
+        }
+    },
+    "value52": 0,
+    "value53": 0,
+    "value54": 0,
+    "value55": 0
+}
